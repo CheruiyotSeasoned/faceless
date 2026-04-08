@@ -22,6 +22,11 @@ function Field({ label, name, value, onChange, type = 'text', hint }) {
   )
 }
 
+const CURRENCIES = ['USD','KES','GBP','EUR','NGN','GHS','ZAR']
+
+const PLAN_LABELS = { starter: 'Starter', pro: 'Pro', creator: 'Creator' }
+const PLAN_DEFAULTS = { starter: { price: 9, credits: 20 }, pro: { price: 129, credits: 60 }, creator: { price: 249, credits: 150 } }
+
 export default function AdminSettings() {
   const [form,    setForm]    = useState({})
   const [loading, setLoading] = useState(true)
@@ -97,6 +102,45 @@ export default function AdminSettings() {
               hint="Starts with pk_live_ or pk_test_" />
             <Field label="Secret key" name="paystack_secret_key" value={form.paystack_secret_key} onChange={set}
               type="password" hint="Starts with sk_live_ or sk_test_" />
+          </div>
+        </Section>
+
+        {/* Billing */}
+        <Section title="Billing & Pricing">
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--th-text-2)' }}>Currency</label>
+            <select className="input" name="billing_currency" value={form.billing_currency || 'USD'} onChange={set}>
+              {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+            <p className="text-xs mt-1" style={{ color: 'var(--th-text-4)' }}>
+              Controls the currency sent to Paystack and displayed on the pricing page.
+              Ensure your Paystack account supports this currency.
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            <div className="text-xs font-semibold uppercase tracking-wide" style={{ color: 'var(--th-text-4)' }}>
+              Plan prices (in major units — e.g. 129 = $129 or KES 129)
+            </div>
+            {Object.entries(PLAN_LABELS).map(([id, label]) => (
+              <div key={id} className="grid grid-cols-2 gap-3 p-3 rounded-xl" style={{ background: 'var(--th-bg-2)' }}>
+                <div className="col-span-2 text-sm font-semibold" style={{ color: 'var(--th-text-2)' }}>{label}</div>
+                <Field
+                  label="Price / month"
+                  name={`price_${id}`}
+                  type="number"
+                  value={form[`price_${id}`] ?? PLAN_DEFAULTS[id].price}
+                  onChange={set}
+                />
+                <Field
+                  label="Credits granted"
+                  name={`credits_${id}`}
+                  type="number"
+                  value={form[`credits_${id}`] ?? PLAN_DEFAULTS[id].credits}
+                  onChange={set}
+                />
+              </div>
+            ))}
           </div>
         </Section>
 
