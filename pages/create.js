@@ -4,24 +4,44 @@ import { useRouter } from 'next/router'
 import AppShell from '../components/AppShell'
 import { auth, videos as videosApi, onboarding as ob } from '../lib/api'
 
-const TOPICS    = ['Motivation','Did You Know','Reddit Story','Scary Story','History','Mythology','News Recap','Product Review','Bible Story','Finance Tips','Anime Story','True Crime','Custom']
+const TOPICS    = ['Random AI Story','Motivational','Scary Stories','Interesting History','Fun Facts','Bedtime Stories','Long Form Jokes','Life Pro Tips','ELI5','Philosophy','Custom']
 const VOICES    = [
-  { id:'Adam',    label:'Adam — TikTok & Instagram'  },{ id:'John',    label:'John — Natural Storyteller' },
-  { id:'Alex',    label:'Alex — Upbeat & Clear'      },{ id:'Archer',  label:'Archer — British Male'      },
-  { id:'Astro',   label:'Astro — Deep & Smooth'      },{ id:'Brian',   label:'Brian — Deep & Rugged'      },
-  { id:'Liam',    label:'Liam — Warm Male'           },{ id:'Brittney',label:'Brittney — Vibrant Female'  },
-  { id:'Hope',    label:'Hope — Upbeat Female'       },{ id:'Vanessa', label:'Vanessa — Soft Female'      },
+  { id:'Onyx',    label:'Onyx — Authoritative & Deep'   },
+  { id:'Alloy',   label:'Alloy — Natural & Versatile'   },
+  { id:'Echo',    label:'Echo — Deep & Mature'          },
+  { id:'Nova',    label:'Nova — Energetic & Young'      },
+  { id:'Shimmer', label:'Shimmer — Soft & Calm'        },
+  { id:'Sarah',   label:'Sarah — Professional Female'  },
+  { id:'Charlie', label:'Charlie — Casual Male'        },
 ]
 const ART_STYLES = [
-  { id:'comic',label:'Comic'},{ id:'creepy_comic',label:'Creepy Comic'},{ id:'cartoon',label:'Modern Cartoon'},
-  { id:'disney',label:'Disney'},{ id:'ghibli',label:'Ghibli'},{ id:'anime',label:'Anime'},
-  { id:'painting',label:'Painting'},{ id:'dark_fantasy',label:'Dark Fantasy'},{ id:'realism',label:'Realism'},
-  { id:'pixel',label:'Pixel Art'},{ id:'lego',label:'Lego'},{ id:'fantastic',label:'Fantastic'},
+  { id:'None',          label:'No Style'       },
+  { id:'cinematic',     label:'Cinematic'      },
+  { id:'anime',         label:'Anime'          },
+  { id:'photographic',  label:'Photographic'   },
+  { id:'digital art',   label:'Digital Art'    },
+  { id:'cartoon',       label:'Cartoon'        },
+  { id:'comic book',    label:'Comic Book'     },
+  { id:'fantasy art',   label:'Fantasy Art'    },
+  { id:'pixel art',     label:'Pixel Art'      },
+  { id:'watercolor',    label:'Watercolor'     },
+  { id:'neon punk',     label:'Neon Punk'      },
+  { id:'3d model',      label:'3D Model'       },
 ]
-const CAPTIONS  = [{ id:'Hormozi_1',label:'Bold Stroke'},{ id:'Hormozi_2',label:'Clean Bold'},{ id:'ClassicSubs',label:'Classic Subs'},{ id:'Minimal',label:'Minimal'},{ id:'Karaoke',label:'Karaoke'}]
-const DURATIONS = [{ id:'30',label:'30 sec'},{ id:'60',label:'60 sec'},{ id:'90',label:'90 sec'},{ id:'120',label:'120 sec'}]
-const MUSIC     = [{ id:'',label:'No music'},{ id:'Inspiring',label:'Inspiring'},{ id:'Dramatic',label:'Dramatic'},{ id:'Calm',label:'Calm & Ambient'},{ id:'Energetic',label:'Energetic'},{ id:'Epic',label:'Epic'}]
-const NICHE_MAP = { motivation:'Motivation',facts:'Did You Know',scary:'Scary Story',historical:'History',mythology:'Mythology',truecrime:'True Crime',stoic:'Motivation',morals:'Motivation',finance:'Finance Tips',anime:'Anime Story' }
+const CAPTIONS  = [
+  { id:'Hormozi_1', label:'Hormozi Classic' },
+  { id:'Hormozi_2', label:'Hormozi Bold'    },
+  { id:'Hormozi_3', label:'Hormozi Shadow'  },
+  { id:'Beast',     label:'MrBeast'         },
+  { id:'Ali',       label:'Ali Abdaal'      },
+  { id:'Celine',    label:'Celine — Soft'  },
+  { id:'Dan',       label:'Dan — Impact'   },
+  { id:'David',     label:'David — Loud'   },
+  { id:'Iman',      label:'Iman — Clean'   },
+]
+const DURATIONS = [{ id:'30-60',label:'30–60 sec'},{ id:'60-90',label:'60–90 sec'},{ id:'90-120',label:'90–120 sec'},{ id:'120-180',label:'120–180 sec'}]
+const MUSIC     = [{ id:'',label:'No music'},{ id:'Cinematic',label:'Cinematic'},{ id:'Epic',label:'Epic'},{ id:'Upbeat',label:'Upbeat'},{ id:'Happy',label:'Happy'},{ id:'Sad',label:'Sad'},{ id:'Suspense',label:'Suspense'},{ id:'Lo-Fi',label:'Lo-Fi'},{ id:'Corporate',label:'Corporate'}]
+const NICHE_MAP = { motivation:'Motivational',facts:'Fun Facts',scary:'Scary Stories',historical:'Interesting History',mythology:'Random AI Story',truecrime:'Random AI Story',stoic:'Philosophy',morals:'Life Pro Tips',finance:'Life Pro Tips',anime:'Random AI Story' }
 
 function FieldLabel({ children, optional }) {
   return (
@@ -64,12 +84,12 @@ export default function CreatePage() {
   const [error,   setError]   = useState('')
 
   const [form, setForm] = useState({
-    topic:               'Motivation',
+    topic:               'Motivational',
     prompt:              '',
-    duration:            '60',
-    voice:               'Adam',
+    duration:            '30-60',
+    voice:               'Onyx',
     aspect_ratio:        '9:16',
-    style:               'anime',
+    style:               'cinematic',
     theme:               'Hormozi_1',
     bg_music:            '',
     custom_instructions: '',
@@ -87,9 +107,11 @@ export default function CreatePage() {
         ...f,
         topic:    NICHE_MAP[p.niche?.id] || f.topic,
         prompt:   p.niche?.description   || f.prompt,
-        duration: DURATIONS.find(d => d.id === String(p.series?.duration))?.id || f.duration,
-        voice:    p.voice                || f.voice,
-        style:    p.artStyle             || f.style,
+        duration: DURATIONS.find(d => d.id === p.series?.duration)?.id || f.duration,
+        voice:    VOICES.find(v => v.id === p.voice)?.id               || f.voice,
+        style:    ART_STYLES.find(s => s.id === p.artStyle)?.id        || f.style,
+        theme:    CAPTIONS.find(c => c.id === p.captions)?.id           || f.theme,
+        bg_music: MUSIC.find(m => m.id === p.music?.presets?.[0])?.id  ?? f.bg_music,
       }))
     }).catch(() => {})
   }, [])

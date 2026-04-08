@@ -20,57 +20,52 @@ const PRESET_NICHES = [
 ]
 
 const VOICES = [
-  { id: 'Adam',    label: 'Adam',    gender: 'Male',   desc: 'The well-known voice of TikTok and Instagram'              },
-  { id: 'John',    label: 'John',    gender: 'Male',   desc: 'The perfect storyteller — very realistic and natural'      },
-  { id: 'Alex',    label: 'Alex',    gender: 'Male',   desc: 'Upbeat and pleasant. Great for YouTube Shorts'             },
-  { id: 'Archer',  label: 'Archer',  gender: 'Male',   desc: 'A conversational British male voice'                       },
-  { id: 'Astro',   label: 'Astro',   gender: 'Male',   desc: 'Deep and smooth with great clarity'                        },
-  { id: 'Brian',   label: 'Brian',   gender: 'Male',   desc: 'Deep, rugged male voice'                                   },
-  { id: 'Liam',    label: 'Liam',    gender: 'Male',   desc: 'A warm male voice'                                         },
-  { id: 'Nassim',  label: 'Nassim',  gender: 'Male',   desc: 'Deep and powerful male voice'                              },
-  { id: 'Michael', label: 'Michael', gender: 'Male',   desc: 'Conversational British male voice'                         },
-  { id: 'Justin',  label: 'Justin',  gender: 'Male',   desc: 'Clear and engaging male voice'                             },
-  { id: 'Brittney',label: 'Brittney',gender: 'Female', desc: 'Young, vibrant female voice. Perfect for celebrity news'  },
-  { id: 'Hope',    label: 'Hope',    gender: 'Female', desc: 'Upbeat and clear female voice'                             },
-  { id: 'Vanessa', label: 'Vanessa', gender: 'Female', desc: 'Soft and warm female voice'                                },
+  { id: 'Onyx',    label: 'Onyx',    gender: 'Male',   desc: 'Authoritative and deep — great for serious content'       },
+  { id: 'Alloy',   label: 'Alloy',   gender: 'Male',   desc: 'Natural and versatile — works for any niche'              },
+  { id: 'Echo',    label: 'Echo',    gender: 'Male',   desc: 'Deep and mature — perfect for storytelling'               },
+  { id: 'Charlie', label: 'Charlie', gender: 'Male',   desc: 'Casual and friendly — great for YouTube Shorts'           },
+  { id: 'Nova',    label: 'Nova',    gender: 'Female', desc: 'Energetic and young — perfect for trending content'       },
+  { id: 'Shimmer', label: 'Shimmer', gender: 'Female', desc: 'Soft and calm — ideal for relaxing or inspirational'      },
+  { id: 'Sarah',   label: 'Sarah',   gender: 'Female', desc: 'Professional female voice'                                },
 ]
 
 const MUSIC_PRESETS = [
-  { id: 'happy',    label: 'Happy Rhythm',       desc: 'Upbeat and energetic, perfect for positive content'         },
-  { id: 'storm',    label: 'Quiet Before Storm', desc: 'Building tension and anticipation for dramatic reveals'     },
-  { id: 'symphony', label: 'Brilliant Symphony', desc: 'Orchestral and majestic for epic storytelling'             },
-  { id: 'shadows',  label: 'Breathing Shadows',  desc: 'Mysterious and eerie ambiance for suspenseful videos'      },
-  { id: '8bit',     label: '8-Bit Slowed',       desc: 'Eerie chiptune with a haunting retro feel'                 },
-  { id: 'deepbass', label: 'Deep Bass',          desc: 'Dark interstellar atmosphere with deep low-end'            },
+  { id: '',          label: 'No Music',    desc: 'No background music'                                              },
+  { id: 'Cinematic', label: 'Cinematic',   desc: 'Epic cinematic feel — great for history and drama'               },
+  { id: 'Epic',      label: 'Epic',        desc: 'Powerful and intense — perfect for action-packed content'        },
+  { id: 'Upbeat',    label: 'Upbeat',      desc: 'Positive and energetic — ideal for motivational videos'          },
+  { id: 'Happy',     label: 'Happy',       desc: 'Fun and cheerful — great for lighthearted content'               },
+  { id: 'Suspense',  label: 'Suspense',    desc: 'Tense and mysterious — perfect for scary stories'                },
+  { id: 'Sad',       label: 'Sad',         desc: 'Emotional and melancholic — great for heartfelt stories'         },
+  { id: 'Lo-Fi',     label: 'Lo-Fi',       desc: 'Chill and relaxed — ideal for calm or study content'             },
+  { id: 'Corporate', label: 'Corporate',   desc: 'Professional and clean — good for finance or business content'   },
 ]
 
 const ART_STYLES = [
-  { id: 'comic',        label: 'Comic'         },
-  { id: 'creepy_comic', label: 'Creepy Comic'  },
-  { id: 'cartoon',      label: 'Modern Cartoon'},
-  { id: 'disney',       label: 'Disney'        },
-  { id: 'mythology',    label: 'Mythology'     },
-  { id: 'pixel',        label: 'Pixel Art'     },
-  { id: 'ghibli',       label: 'Ghibli'        },
+  { id: 'None',         label: 'No Style'      },
+  { id: 'cinematic',    label: 'Cinematic'     },
   { id: 'anime',        label: 'Anime'         },
-  { id: 'painting',     label: 'Painting'      },
-  { id: 'dark_fantasy', label: 'Dark Fantasy'  },
-  { id: 'lego',         label: 'Lego'          },
-  { id: 'polaroid',     label: 'Polaroid'      },
-  { id: 'realism',      label: 'Realism'       },
-  { id: 'fantastic',    label: 'Fantastic'     },
+  { id: 'photographic', label: 'Photographic'  },
+  { id: 'digital art',  label: 'Digital Art'   },
+  { id: 'cartoon',      label: 'Cartoon'       },
+  { id: 'comic book',   label: 'Comic Book'    },
+  { id: 'fantasy art',  label: 'Fantasy Art'   },
+  { id: 'pixel art',    label: 'Pixel Art'     },
+  { id: 'watercolor',   label: 'Watercolor'    },
+  { id: 'neon punk',    label: 'Neon Punk'     },
+  { id: '3d model',     label: '3D Model'      },
 ]
 
 const CAPTION_STYLES = [
-  { id: 'bold_stroke',   label: 'Bold Stroke'  },
-  { id: 'red_highlight', label: 'Red Highlight'},
-  { id: 'sleek',         label: 'Sleek'        },
-  { id: 'karaoke',       label: 'Karaoke'      },
-  { id: 'majestic',      label: 'Majestic'     },
-  { id: 'beast',         label: 'Beast'        },
-  { id: 'elegant',       label: 'Elegant'      },
-  { id: 'pixel',         label: 'Pixel'        },
-  { id: 'clarity',       label: 'Clarity'      },
+  { id: 'Hormozi_1', label: 'Hormozi Classic' },
+  { id: 'Hormozi_2', label: 'Hormozi Bold'    },
+  { id: 'Hormozi_3', label: 'Hormozi Shadow'  },
+  { id: 'Beast',     label: 'MrBeast'         },
+  { id: 'Ali',       label: 'Ali Abdaal'      },
+  { id: 'Celine',    label: 'Celine'          },
+  { id: 'Dan',       label: 'Dan'             },
+  { id: 'David',     label: 'David'           },
+  { id: 'Iman',      label: 'Iman'            },
 ]
 
 const EFFECTS = [
@@ -80,10 +75,10 @@ const EFFECTS = [
 ]
 
 const DURATIONS = [
-  { id: '30',  label: '30 seconds' },
-  { id: '60',  label: '60 seconds' },
-  { id: '90',  label: '90 seconds' },
-  { id: '120', label: '120 seconds'},
+  { id: '30-60',   label: '30–60 seconds'  },
+  { id: '60-90',   label: '60–90 seconds'  },
+  { id: '90-120',  label: '90–120 seconds' },
+  { id: '120-180', label: '120–180 seconds'},
 ]
 
 const STEP_LABELS = ['Niche', 'Voice', 'Music', 'Art Style', 'Captions', 'Effects', 'Social', 'Details', 'Account']
@@ -743,13 +738,13 @@ export default function OnboardingPage() {
 
   const [prefs, setPrefs] = useState({
     niche:    { type: 'preset', id: '', description: '', exampleScript: '' },
-    voice:    'Adam',
+    voice:    'Onyx',
     music:    { presets: [], tiktokUrls: '' },
     artStyle: '',
-    captions: 'bold_stroke',
+    captions: 'Hormozi_1',
     effects:  [],
     social:   [],
-    series:   { name: '', duration: '60', publishTime: '12:00' },
+    series:   { name: '', duration: '30-60', publishTime: '12:00' },
   })
 
   const update = (key) => (val) => setPrefs(p => ({ ...p, [key]: val }))
