@@ -87,7 +87,7 @@ export default function CreatePage() {
         ...f,
         topic:    NICHE_MAP[p.niche?.id] || f.topic,
         prompt:   p.niche?.description   || f.prompt,
-        duration: p.series?.duration     || f.duration,
+        duration: DURATIONS.find(d => d.id === String(p.series?.duration))?.id || f.duration,
         voice:    p.voice                || f.voice,
         style:    p.artStyle             || f.style,
       }))
