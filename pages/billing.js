@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import AppShell from '../components/AppShell'
@@ -11,15 +11,85 @@ function formatPrice(price, currency) {
   return price === 0 ? 'Free' : `${sym}${price.toLocaleString()}`
 }
 
+function CheckoutDialog({ url, onClose, onSuccess }) {
+  const iframeRef = useRef(null)
+
+  const handleLoad = useCallback(() => {
+    try {
+      const loc = iframeRef.current?.contentWindow?.location?.href || ''
+      // When iframe navigates back to our domain we can read the URL
+      if (loc && (loc.includes('success=1') || loc.includes('/billing') || loc.includes('/dashboard'))) {
+        onSuccess()
+      }
+    } catch {
+      // Still cross-origin (on Paystack) — ignore
+    }
+  }, [onSuccess])
+
+  // Close on Escape
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [onClose])
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)' }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+    >
+      <div
+        className="relative flex flex-col rounded-2xl overflow-hidden shadow-2xl w-full"
+        style={{
+          maxWidth: 480,
+          height: '85vh',
+          background: 'var(--th-surface)',
+          border: '1px solid var(--th-border)',
+        }}
+      >
+        {/* Dialog header */}
+        <div className="flex items-center justify-between px-5 py-3 flex-shrink-0"
+          style={{ borderBottom: '1px solid var(--th-border)' }}>
+          <span className="text-sm font-semibold" style={{ color: 'var(--th-text-2)' }}>
+            Complete payment
+          </span>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 flex items-center justify-center rounded-lg transition-colors"
+            style={{ color: 'var(--th-text-4)' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Iframe */}
+        <iframe
+          ref={iframeRef}
+          src={url}
+          onLoad={handleLoad}
+          className="flex-1 w-full border-0"
+          title="Paystack Checkout"
+          allow="payment"
+        />
+      </div>
+    </div>
+  )
+}
+
 export default function BillingPage() {
   const router = useRouter()
-  const [user,     setUser]    = useState(null)
-  const [plans,    setPlans]   = useState([])
-  const [currency, setCurrency] = useState('USD')
-  const [history,  setHistory] = useState([])
-  const [paying,   setPaying]  = useState('')
-  const [error,    setError]   = useState('')
-  const [loading,  setLoading] = useState(true)
+  const [user,        setUser]       = useState(null)
+  const [plans,       setPlans]      = useState([])
+  const [currency,    setCurrency]   = useState('USD')
+  const [history,     setHistory]    = useState([])
+  const [paying,      setPaying]     = useState('')
+  const [error,       setError]      = useState('')
+  const [loading,     setLoading]    = useState(true)
+  const [checkoutUrl, setCheckoutUrl] = useState(null)
+  const [success,     setSuccess]    = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -35,18 +105,26 @@ export default function BillingPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  // Refresh user after successful payment
+  // Refresh user after successful payment (redirect-based fallback)
   useEffect(() => {
     if (router.query.success === '1') auth.me().then(setUser).catch(() => {})
   }, [router.query])
+
+  const handlePaymentSuccess = useCallback(() => {
+    setCheckoutUrl(null)
+    setSuccess(true)
+    auth.me().then(setUser).catch(() => {})
+    billingApi.history().then(h => setHistory(h.payments || [])).catch(() => {})
+  }, [])
 
   const subscribe = async (plan) => {
     if (plan.id === 'free' || plan.id === user?.plan) return
     setPaying(plan.id)
     setError('')
+    setSuccess(false)
     try {
       const data = await billingApi.initialize({ plan: plan.id })
-      if (data.data?.authorization_url) window.location.href = data.data.authorization_url
+      if (data.data?.authorization_url) setCheckoutUrl(data.data.authorization_url)
     } catch (e) {
       setError(e.message || 'Payment failed. Please try again.')
     } finally {
@@ -69,6 +147,15 @@ export default function BillingPage() {
   return (
     <>
       <Head><title>Billing — Faceless Reels</title></Head>
+
+      {checkoutUrl && (
+        <CheckoutDialog
+          url={checkoutUrl}
+          onClose={() => setCheckoutUrl(null)}
+          onSuccess={handlePaymentSuccess}
+        />
+      )}
+
       <AppShell breadcrumb={[{ label: 'Billing' }]}>
         <div className="p-7">
 
@@ -81,7 +168,7 @@ export default function BillingPage() {
             </p>
           </div>
 
-          {router.query.success === '1' && (
+          {(success || router.query.success === '1') && (
             <div className="rounded-xl border p-3 text-sm mb-6 flex items-center gap-2"
               style={{ background: 'rgba(34,197,94,0.08)', borderColor: 'rgba(34,197,94,0.2)', color: '#4ade80' }}>
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
