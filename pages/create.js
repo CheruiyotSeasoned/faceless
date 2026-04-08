@@ -19,7 +19,7 @@ const ART_STYLES = [
   { id:'pixel',label:'Pixel Art'},{ id:'lego',label:'Lego'},{ id:'fantastic',label:'Fantastic'},
 ]
 const CAPTIONS  = [{ id:'Hormozi_1',label:'Bold Stroke'},{ id:'Hormozi_2',label:'Clean Bold'},{ id:'ClassicSubs',label:'Classic Subs'},{ id:'Minimal',label:'Minimal'},{ id:'Karaoke',label:'Karaoke'}]
-const DURATIONS = [{ id:'30-40',label:'30–40 sec'},{ id:'50-60',label:'50–60 sec'},{ id:'60-90',label:'60–90 sec'},{ id:'90-120',label:'90–120 sec'}]
+const DURATIONS = [{ id:'30',label:'30 sec'},{ id:'60',label:'60 sec'},{ id:'90',label:'90 sec'},{ id:'120',label:'120 sec'}]
 const MUSIC     = [{ id:'',label:'No music'},{ id:'Inspiring',label:'Inspiring'},{ id:'Dramatic',label:'Dramatic'},{ id:'Calm',label:'Calm & Ambient'},{ id:'Energetic',label:'Energetic'},{ id:'Epic',label:'Epic'}]
 const NICHE_MAP = { motivation:'Motivation',facts:'Did You Know',scary:'Scary Story',historical:'History',mythology:'Mythology',truecrime:'True Crime',stoic:'Motivation',morals:'Motivation',finance:'Finance Tips',anime:'Anime Story' }
 
@@ -66,7 +66,7 @@ export default function CreatePage() {
   const [form, setForm] = useState({
     topic:               'Motivation',
     prompt:              '',
-    duration:            '60-90',
+    duration:            '60',
     voice:               'Adam',
     aspect_ratio:        '9:16',
     style:               'anime',

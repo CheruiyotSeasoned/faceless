@@ -80,10 +80,10 @@ const EFFECTS = [
 ]
 
 const DURATIONS = [
-  { id: '30-40',  label: '30–40 seconds' },
-  { id: '50-60',  label: '50–60 seconds' },
-  { id: '60-90',  label: '60–90 seconds' },
-  { id: '90-120', label: '90–120 seconds'},
+  { id: '30',  label: '30 seconds' },
+  { id: '60',  label: '60 seconds' },
+  { id: '90',  label: '90 seconds' },
+  { id: '120', label: '120 seconds'},
 ]
 
 const STEP_LABELS = ['Niche', 'Voice', 'Music', 'Art Style', 'Captions', 'Effects', 'Social', 'Details', 'Account']
@@ -749,7 +749,7 @@ export default function OnboardingPage() {
     captions: 'bold_stroke',
     effects:  [],
     social:   [],
-    series:   { name: '', duration: '50-60', publishTime: '12:00' },
+    series:   { name: '', duration: '60', publishTime: '12:00' },
   })
 
   const update = (key) => (val) => setPrefs(p => ({ ...p, [key]: val }))
