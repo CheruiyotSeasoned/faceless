@@ -28,15 +28,17 @@ const TESTIMONIALS = [
 ]
 
 export default function HomePage() {
-  const [plans,    setPlans]    = useState([])
-  const [currency, setCurrency] = useState('USD')
+  const [plans,        setPlans]        = useState([])
+  const [currency,     setCurrency]     = useState('USD')
   const [plansLoading, setPlansLoading] = useState(true)
+  const [loggedIn,     setLoggedIn]     = useState(false)
 
   useEffect(() => {
     billingApi.config()
       .then(cfg => { setPlans(cfg.plans || []); setCurrency(cfg.currency || 'USD') })
-      .catch(() => {}) // fail silently — pricing just won't show
+      .catch(() => {})
       .finally(() => setPlansLoading(false))
+    auth.me().then(() => setLoggedIn(true)).catch(() => {})
   }, [])
 
   const sym = CURRENCY_SYMBOLS[currency] || (currency + ' ')
@@ -297,9 +299,14 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/onboarding"
+                  <Link
+                    href={plan.id === 'free'
+                      ? (loggedIn ? '/dashboard' : '/onboarding')
+                      : (loggedIn ? '/billing' : '/onboarding')}
                     className={`${plan.popular ? 'btn-primary' : 'btn-secondary'} text-center text-sm`}>
-                    {plan.id === 'free' ? 'Start free' : `Get ${plan.name}`}
+                    {plan.id === 'free'
+                      ? (loggedIn ? 'Go to dashboard' : 'Start free')
+                      : (loggedIn ? `Upgrade to ${plan.name}` : `Get ${plan.name}`)}
                   </Link>
                 </div>
               ))}

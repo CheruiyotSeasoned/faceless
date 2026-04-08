@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import AdminShell from '../../components/AdminShell'
 import { admin } from '../../lib/admin'
+import { vadoo } from '../../lib/api'
 
 function StatCard({ label, value, sub, color }) {
   return (
@@ -17,6 +18,7 @@ const PLAN_COLORS = { free: 'var(--th-text-4)', starter: '#3b82f6', pro: 'var(--
 
 export default function AdminDashboard() {
   const [data,    setData]    = useState(null)
+  const [balance, setBalance] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -24,6 +26,7 @@ export default function AdminDashboard() {
       .then(setData)
       .catch(() => {})
       .finally(() => setLoading(false))
+    vadoo.balance().then(b => setBalance(b)).catch(() => {})
   }, [])
 
   return (
@@ -36,13 +39,29 @@ export default function AdminDashboard() {
           </div>
         ) : (
           <>
+            {/* Vadoo balance warning */}
+            {balance?.balance !== undefined && balance.balance !== null && balance.balance < 10 && (
+              <div className="rounded-xl px-4 py-3 flex items-center gap-3 text-sm"
+                style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)' }}>
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
+                  <path d="M7 1.5L13 12.5H1L7 1.5Z" stroke="#f59e0b" strokeWidth="1.3" strokeLinejoin="round"/>
+                  <path d="M7 5.5v3M7 10v.5" stroke="#f59e0b" strokeWidth="1.3" strokeLinecap="round"/>
+                </svg>
+                <span style={{ color: '#f59e0b' }}>
+                  Vadoo balance is low — <strong>{balance.balance}</strong> credits remaining.
+                  Top up at <a href="https://vadoo.tv" target="_blank" rel="noreferrer" className="underline font-medium">vadoo.tv</a> to keep videos generating.
+                </span>
+              </div>
+            )}
+
             {/* Stats row */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
               <StatCard label="Total users"    value={data?.users}      color="var(--th-accent)" />
               <StatCard label="Total videos"   value={data?.videos}     color="var(--th-text-1)" />
               <StatCard label="Completed"      value={data?.completed}  color="#22c55e" />
               <StatCard label="Processing"     value={data?.processing} color="#f59e0b" />
               <StatCard label="Failed"         value={data?.failed}     color="#ef4444" />
+              <StatCard label="Vadoo credits"  value={balance?.balance ?? '—'} color="#a78bfa" sub="provider balance" />
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">

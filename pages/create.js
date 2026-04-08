@@ -141,6 +141,47 @@ export default function CreatePage() {
       <Head><title>Create Video — Faceless Reels</title></Head>
       <AppShell breadcrumb={[{ label: 'Series', href: '/dashboard' }, { label: 'Create Video' }]}>
         <div className="p-7 max-w-2xl">
+
+          {/* ── Out of credits banner ── */}
+          {user && user.credits < 1 && (
+            <div className="rounded-2xl p-5 mb-6 flex items-start gap-4"
+              style={{ background: 'linear-gradient(135deg, rgba(108,71,255,0.12), rgba(79,70,229,0.08))', border: '1px solid var(--th-accent-md)' }}>
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0"
+                style={{ background: 'var(--th-accent-lt)' }}>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                  <circle cx="9" cy="9" r="7.5" stroke="var(--th-accent)" strokeWidth="1.4"/>
+                  <path d="M9 5.5v4M9 11.5v1" stroke="var(--th-accent)" strokeWidth="1.5" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-semibold text-sm mb-1" style={{ color: 'var(--th-text-1)' }}>
+                  You're out of credits
+                </div>
+                <p className="text-xs leading-relaxed mb-3" style={{ color: 'var(--th-text-3)' }}>
+                  Upgrade your plan to keep generating videos. Credits reset monthly on paid plans.
+                </p>
+                <a href="/billing" className="btn-primary text-xs px-4 py-2 inline-block">
+                  Upgrade plan
+                </a>
+              </div>
+            </div>
+          )}
+
+          {/* ── Low credits warning ── */}
+          {user && user.credits > 0 && user.credits <= 3 && (
+            <div className="rounded-xl px-4 py-3 mb-5 flex items-center gap-3 text-sm"
+              style={{ background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)' }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="flex-shrink-0">
+                <path d="M7 1.5L13 12.5H1L7 1.5Z" stroke="#f59e0b" strokeWidth="1.3" strokeLinejoin="round"/>
+                <path d="M7 5.5v3M7 10v.5" stroke="#f59e0b" strokeWidth="1.3" strokeLinecap="round"/>
+              </svg>
+              <span style={{ color: '#f59e0b' }}>
+                Only <strong>{user.credits}</strong> credit{user.credits === 1 ? '' : 's'} left.{' '}
+                <a href="/billing" className="underline font-medium">Upgrade now</a> to avoid interruption.
+              </span>
+            </div>
+          )}
+
           <div className="mb-6">
             <h1 className="text-lg font-bold" style={{ color: 'var(--th-text-1)' }}>Create a video</h1>
             <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-4)' }}>
