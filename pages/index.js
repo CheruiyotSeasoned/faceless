@@ -1,6 +1,10 @@
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Navbar from '../components/Navbar'
+import { billing as billingApi } from '../lib/api'
+
+const CURRENCY_SYMBOLS = { USD: '$', KES: 'KES ', GBP: '£', EUR: '€', NGN: '₦', GHS: 'GH₵', ZAR: 'R' }
 
 const FEATURES = [
   { title: 'Generate in minutes',    desc: 'Pick a topic, click generate. Your AI video is ready in under 3 minutes with script, voice, visuals and captions.' },
@@ -16,16 +20,6 @@ const NICHES = [
   'History', 'Mythology', 'News Recap', 'Finance Tips', 'Bible Stories', 'True Crime',
 ]
 
-const PLANS = [
-  { id:'free',    name:'Free',    price:'0',     period:'forever', videos:'3 total',   cta:'Start free',       href:'/onboarding', popular:false,
-    features:['3 video credits','720p quality','Watermark included','All niches & voices'] },
-  { id:'starter', name:'Starter', price:'999',   period:'/month',  videos:'20/month',  cta:'Get Starter',      href:'/onboarding', popular:false,
-    features:['20 credits/month','1080p quality','No watermark','All niches & voices','Caption themes','Email support'] },
-  { id:'pro',     name:'Pro',     price:'2,499', period:'/month',  videos:'60/month',  cta:'Get Pro',          href:'/onboarding', popular:true,
-    features:['60 credits/month','1080p quality','No watermark','Priority generation','Blog to video','Priority support'] },
-  { id:'creator', name:'Creator', price:'4,999', period:'/month',  videos:'150/month', cta:'Get Creator',      href:'/onboarding', popular:false,
-    features:['150 credits/month','4K quality','No watermark','Fastest generation','API access (soon)','Dedicated support'] },
-]
 
 const TESTIMONIALS = [
   { name:'James K.',  handle:'@motivationwithJK', avatar:'JK', quote:'I went from 0 to 80K followers in 3 months posting faceless motivation content. This tool saves me 5+ hours every single week.', metric:'80K followers' },
@@ -34,6 +28,20 @@ const TESTIMONIALS = [
 ]
 
 export default function HomePage() {
+  const [plans,    setPlans]    = useState([])
+  const [currency, setCurrency] = useState('USD')
+  const [plansLoading, setPlansLoading] = useState(true)
+
+  useEffect(() => {
+    billingApi.config()
+      .then(cfg => { setPlans(cfg.plans || []); setCurrency(cfg.currency || 'USD') })
+      .catch(() => {}) // fail silently — pricing just won't show
+      .finally(() => setPlansLoading(false))
+  }, [])
+
+  const sym = CURRENCY_SYMBOLS[currency] || (currency + ' ')
+  const fmtPrice = (price) => price === 0 ? 'Free' : `${sym}${price.toLocaleString()}`
+
   return (
     <>
       <Head>
@@ -247,42 +255,56 @@ export default function HomePage() {
             </h2>
             <p className="text-lg" style={{ color: 'var(--th-text-3)' }}>Start free. Scale when you're ready.</p>
           </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {PLANS.map(plan => (
-              <div key={plan.id} className="card p-6 flex flex-col relative"
-                style={plan.popular ? { borderColor: 'var(--th-accent)', boxShadow: '0 0 0 1px var(--th-accent)' } : {}}>
-                {plan.popular && (
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="badge-purple text-xs font-bold px-3 py-1 rounded-full">Most popular</span>
-                  </div>
-                )}
-                <div className="mb-5">
-                  <div className="text-sm font-medium mb-1" style={{ color: 'var(--th-text-2)' }}>{plan.name}</div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-xs" style={{ color: 'var(--th-text-4)' }}>KES</span>
-                    <span className="text-4xl font-black" style={{ color: 'var(--th-text-1)' }}>{plan.price}</span>
-                    <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>{plan.period}</span>
-                  </div>
-                  <div className="text-sm font-semibold mt-0.5" style={{ color: 'var(--th-accent)' }}>{plan.videos}</div>
+          {plansLoading ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="card p-6 animate-pulse">
+                  <div className="h-4 rounded mb-3 w-1/3" style={{ background: 'var(--th-border)' }} />
+                  <div className="h-10 rounded mb-2 w-2/3" style={{ background: 'var(--th-border)' }} />
+                  <div className="h-3 rounded mb-6 w-1/2" style={{ background: 'var(--th-border)' }} />
+                  {[...Array(4)].map((_, j) => <div key={j} className="h-3 rounded mb-2" style={{ background: 'var(--th-border)' }} />)}
                 </div>
-                <ul className="space-y-2.5 flex-1 mb-5">
-                  {plan.features.map(f => (
-                    <li key={f} className="flex items-start gap-2 text-sm" style={{ color: 'var(--th-text-3)' }}>
-                      <svg className="flex-shrink-0 mt-0.5" width="13" height="13" viewBox="0 0 13 13" fill="none">
-                        <circle cx="6.5" cy="6.5" r="5.5" fill="var(--th-accent-lt)"/>
-                        <path d="M4 6.5l2 2 3-3" stroke="var(--th-accent)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-                      </svg>
-                      {f}
-                    </li>
-                  ))}
-                </ul>
-                <Link href={plan.href}
-                  className={`${plan.popular ? 'btn-primary' : 'btn-secondary'} text-center text-sm`}>
-                  {plan.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {plans.map(plan => (
+                <div key={plan.id} className="card p-6 flex flex-col relative"
+                  style={plan.popular ? { borderColor: 'var(--th-accent)', boxShadow: '0 0 0 1px var(--th-accent)' } : {}}>
+                  {plan.popular && (
+                    <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                      <span className="badge-purple text-xs font-bold px-3 py-1 rounded-full">Most popular</span>
+                    </div>
+                  )}
+                  <div className="mb-5">
+                    <div className="text-sm font-medium mb-1" style={{ color: 'var(--th-text-2)' }}>{plan.name}</div>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-black" style={{ color: 'var(--th-text-1)' }}>{fmtPrice(plan.price)}</span>
+                      {plan.price > 0 && <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>/month</span>}
+                    </div>
+                    <div className="text-sm font-semibold mt-0.5" style={{ color: 'var(--th-accent)' }}>
+                      {plan.id === 'free' ? '3 total credits' : `${plan.credits} credits/month`}
+                    </div>
+                  </div>
+                  <ul className="space-y-2.5 flex-1 mb-5">
+                    {(plan.features || []).map(f => (
+                      <li key={f} className="flex items-start gap-2 text-sm" style={{ color: 'var(--th-text-3)' }}>
+                        <svg className="flex-shrink-0 mt-0.5" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                          <circle cx="6.5" cy="6.5" r="5.5" fill="var(--th-accent-lt)"/>
+                          <path d="M4 6.5l2 2 3-3" stroke="var(--th-accent)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        {f}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link href="/onboarding"
+                    className={`${plan.popular ? 'btn-primary' : 'btn-secondary'} text-center text-sm`}>
+                    {plan.id === 'free' ? 'Start free' : `Get ${plan.name}`}
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
 
         {/* ── CTA ── */}
