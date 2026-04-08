@@ -106,7 +106,7 @@ export default function CreatePage() {
       if (!payload.bg_music) delete payload.bg_music
       if (!payload.custom_instructions) delete payload.custom_instructions
       const result = await videosApi.create(payload)
-      router.push(`/video/${result.video_id}`)
+      router.push(`/video/${result.id}`)
     } catch (e) {
       setError(e.message || 'Failed to create video.')
     } finally {
