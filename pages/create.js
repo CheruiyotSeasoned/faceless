@@ -2,18 +2,9 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import AppShell from '../components/AppShell'
-import { auth, videos as videosApi, onboarding as ob } from '../lib/api'
+import { auth, videos as videosApi, onboarding as ob, vadoo as vadooApi } from '../lib/api'
 
 const TOPICS    = ['Random AI Story','Motivational','Scary Stories','Interesting History','Fun Facts','Bedtime Stories','Long Form Jokes','Life Pro Tips','ELI5','Philosophy','Custom']
-const VOICES    = [
-  { id:'Onyx',    label:'Onyx — Authoritative & Deep'   },
-  { id:'Alloy',   label:'Alloy — Natural & Versatile'   },
-  { id:'Echo',    label:'Echo — Deep & Mature'          },
-  { id:'Nova',    label:'Nova — Energetic & Young'      },
-  { id:'Shimmer', label:'Shimmer — Soft & Calm'        },
-  { id:'Sarah',   label:'Sarah — Professional Female'  },
-  { id:'Charlie', label:'Charlie — Casual Male'        },
-]
 const ART_STYLES = [
   { id:'None',          label:'No Style'       },
   { id:'cinematic',     label:'Cinematic'      },
@@ -79,13 +70,16 @@ function Section({ title, children }) {
 
 export default function CreatePage() {
   const router = useRouter()
-  const [user,    setUser]    = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [error,   setError]   = useState('')
+  const [user,      setUser]      = useState(null)
+  const [loading,   setLoading]   = useState(false)
+  const [error,     setError]     = useState('')
+  const [voices,    setVoices]    = useState([])
+  const [languages, setLanguages] = useState([])
 
   const [form, setForm] = useState({
     topic:               'Motivational',
     prompt:              '',
+    language:            'English',
     duration:            '30-60',
     voice:               'Onyx',
     aspect_ratio:        '9:16',
@@ -100,6 +94,8 @@ export default function CreatePage() {
 
   useEffect(() => {
     auth.me().then(setUser).catch(() => router.push('/login'))
+    vadooApi.voices().then(d => setVoices(d.voices || [])).catch(() => {})
+    vadooApi.languages().then(d => setLanguages(d.languages || [])).catch(() => {})
     // Load prefs from DB (falls back to localStorage)
     ob.load().then(p => {
       if (!p) return
@@ -107,8 +103,9 @@ export default function CreatePage() {
         ...f,
         topic:    NICHE_MAP[p.niche?.id] || f.topic,
         prompt:   p.niche?.description   || f.prompt,
+        language: p.language             || f.language,
         duration: DURATIONS.find(d => d.id === p.series?.duration)?.id || f.duration,
-        voice:    VOICES.find(v => v.id === p.voice)?.id               || f.voice,
+        voice:    p.voice                                                || f.voice,
         style:    ART_STYLES.find(s => s.id === p.artStyle)?.id        || f.style,
         theme:    CAPTIONS.find(c => c.id === p.captions)?.id           || f.theme,
         bg_music: MUSIC.find(m => m.id === p.music?.presets?.[0])?.id  ?? f.bg_music,
@@ -219,12 +216,17 @@ export default function CreatePage() {
 
             <Section title="Style">
               <div className="grid grid-cols-2 gap-3">
-                <Select label="Voice"   value={form.voice} onChange={v => set('voice', v)} options={VOICES} />
-                <Select label="Art style" value={form.style} onChange={v => set('style', v)} options={ART_STYLES} />
+                <Select label="Language" value={form.language} onChange={v => set('language', v)}
+                  options={languages.length ? languages : [{ id: 'English', label: 'English' }]} />
+                <Select label="Voice" value={form.voice} onChange={v => set('voice', v)}
+                  options={voices.length ? voices.map(v => ({ id: v.id, label: v.tone ? `${v.label} — ${v.tone}` : v.label })) : [{ id: form.voice, label: form.voice }]} />
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <Select label="Captions" value={form.theme}    onChange={v => set('theme', v)}    options={CAPTIONS} />
-                <Select label="Music"    value={form.bg_music} onChange={v => set('bg_music', v)} options={MUSIC} />
+                <Select label="Art style" value={form.style} onChange={v => set('style', v)} options={ART_STYLES} />
+                <Select label="Captions" value={form.theme} onChange={v => set('theme', v)} options={CAPTIONS} />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <Select label="Music" value={form.bg_music} onChange={v => set('bg_music', v)} options={MUSIC} />
               </div>
             </Section>
 

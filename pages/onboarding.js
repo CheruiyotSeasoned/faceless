@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { auth, onboarding as ob } from '../lib/api'
+import { auth, onboarding as ob, vadoo as vadooApi } from '../lib/api'
 
 // ─── Step data ───────────────────────────────────────────────────────────────
 
@@ -19,15 +19,6 @@ const PRESET_NICHES = [
   { id: 'anime',      label: 'Anime Stories',       desc: 'Dramatic storytelling for a massive anime fanbase'                       },
 ]
 
-const VOICES = [
-  { id: 'Onyx',    label: 'Onyx',    gender: 'Male',   desc: 'Authoritative and deep — great for serious content'       },
-  { id: 'Alloy',   label: 'Alloy',   gender: 'Male',   desc: 'Natural and versatile — works for any niche'              },
-  { id: 'Echo',    label: 'Echo',    gender: 'Male',   desc: 'Deep and mature — perfect for storytelling'               },
-  { id: 'Charlie', label: 'Charlie', gender: 'Male',   desc: 'Casual and friendly — great for YouTube Shorts'           },
-  { id: 'Nova',    label: 'Nova',    gender: 'Female', desc: 'Energetic and young — perfect for trending content'       },
-  { id: 'Shimmer', label: 'Shimmer', gender: 'Female', desc: 'Soft and calm — ideal for relaxing or inspirational'      },
-  { id: 'Sarah',   label: 'Sarah',   gender: 'Female', desc: 'Professional female voice'                                },
-]
 
 const MUSIC_PRESETS = [
   { id: '',          label: 'No Music',    desc: 'No background music'                                              },
@@ -272,11 +263,16 @@ function StepNiche({ value, onChange }) {
   )
 }
 
-function StepVoice({ value, onChange }) {
+function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, languages }) {
+  const maleVoices   = voices.filter(v => v.gender?.toLowerCase() === 'male')
+  const femaleVoices = voices.filter(v => v.gender?.toLowerCase() === 'female')
+  const otherVoices  = voices.filter(v => !v.gender || (v.gender.toLowerCase() !== 'male' && v.gender.toLowerCase() !== 'female'))
+
   const groups = [
-    { label: 'Male',   voices: VOICES.filter(v => v.gender === 'Male')   },
-    { label: 'Female', voices: VOICES.filter(v => v.gender === 'Female') },
-  ]
+    maleVoices.length   && { label: 'Male',   voices: maleVoices   },
+    femaleVoices.length && { label: 'Female', voices: femaleVoices },
+    otherVoices.length  && { label: 'Other',  voices: otherVoices  },
+  ].filter(Boolean)
 
   return (
     <>
@@ -284,56 +280,68 @@ function StepVoice({ value, onChange }) {
 
       <div className="mb-4">
         <label className="block text-sm font-medium text-[#374151] mb-1.5">Language</label>
-        <div
-          className="flex items-center gap-2 px-3.5 py-2.5 rounded-lg border border-[#e5e1ff] text-sm text-[#374151]"
-          style={{ background: '#fff' }}
-        >
-          <span className="text-base">GB</span>
-          <span>English</span>
+        <div className="relative">
+          <select
+            value={language}
+            onChange={e => onChangeLanguage(e.target.value)}
+            className="w-full appearance-none px-3.5 py-2.5 rounded-lg border border-[#e5e1ff] text-sm text-[#374151] outline-none pr-9 cursor-pointer"
+            style={{ background: '#fff' }}
+          >
+            {(languages.length ? languages : [{ id: 'English', label: 'English' }]).map(l => (
+              <option key={l.id} value={l.id}>{l.label}</option>
+            ))}
+          </select>
+          <svg className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M3.5 5.5l3.5 3.5 3.5-3.5" stroke="#9ca3af" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
       </div>
 
       <div className="text-sm font-semibold text-[#374151] mb-3">Voice Style</div>
-      {groups.map(g => (
-        <div key={g.label} className="mb-4">
-          <div className="text-xs text-[#9ca3af] font-semibold uppercase tracking-wider mb-2">{g.label}</div>
-          <div className="space-y-1.5">
-            {g.voices.map(v => (
-              <SelectCard
-                key={v.id}
-                selected={value === v.id}
-                onClick={() => onChange(v.id)}
-                className="w-full flex items-center gap-3 px-4 py-3"
-              >
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
-                  style={{
-                    background: value === v.id ? '#6c47ff' : (g.label === 'Male' ? '#eff6ff' : '#fdf2f8'),
-                    color:      value === v.id ? '#fff'    : (g.label === 'Male' ? '#3b82f6' : '#ec4899'),
-                  }}
+      {voices.length === 0 ? (
+        <div className="text-sm text-[#9ca3af] py-4 text-center">Loading voices…</div>
+      ) : (
+        groups.map(g => (
+          <div key={g.label} className="mb-4">
+            <div className="text-xs text-[#9ca3af] font-semibold uppercase tracking-wider mb-2">{g.label}</div>
+            <div className="space-y-1.5">
+              {g.voices.map(v => (
+                <SelectCard
+                  key={v.id}
+                  selected={value === v.id}
+                  onClick={() => onChangeVoice(v.id)}
+                  className="w-full flex items-center gap-3 px-4 py-3"
                 >
-                  {v.label.charAt(0)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-sm font-semibold text-[#1a1a2e]">{v.label}</div>
-                  <div className="text-xs text-[#6b7280] mt-0.5">{v.desc}</div>
-                </div>
-                {value === v.id && (
-                  <div className="flex items-end gap-0.5 h-4 mr-6">
-                    {[3, 5, 4, 6, 3].map((h, i) => (
-                      <div
-                        key={i}
-                        className="w-0.5 rounded-full animate-pulse"
-                        style={{ height: `${h * 2}px`, background: '#6c47ff', animationDelay: `${i * 100}ms` }}
-                      />
-                    ))}
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                    style={{
+                      background: value === v.id ? '#6c47ff' : (g.label === 'Male' ? '#eff6ff' : '#fdf2f8'),
+                      color:      value === v.id ? '#fff'    : (g.label === 'Male' ? '#3b82f6' : '#ec4899'),
+                    }}
+                  >
+                    {v.label.charAt(0)}
                   </div>
-                )}
-              </SelectCard>
-            ))}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-semibold text-[#1a1a2e]">{v.label}</div>
+                    {v.tone && <div className="text-xs text-[#6b7280] mt-0.5">{v.tone}</div>}
+                  </div>
+                  {value === v.id && (
+                    <div className="flex items-end gap-0.5 h-4 mr-6">
+                      {[3, 5, 4, 6, 3].map((h, i) => (
+                        <div
+                          key={i}
+                          className="w-0.5 rounded-full animate-pulse"
+                          style={{ height: `${h * 2}px`, background: '#6c47ff', animationDelay: `${i * 100}ms` }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </SelectCard>
+              ))}
+            </div>
           </div>
-        </div>
-      ))}
+        ))
+      )}
     </>
   )
 }
@@ -419,22 +427,19 @@ function StepMusic({ value, onChange }) {
 }
 
 function StepArtStyle({ value, onChange }) {
-  // Style preview gradient map
   const gradients = {
-    comic:        'from-yellow-200 to-orange-200',
-    creepy_comic: 'from-gray-700 to-gray-900',
-    cartoon:      'from-blue-200 to-purple-200',
-    disney:       'from-blue-300 to-pink-200',
-    mythology:    'from-amber-600 to-amber-800',
-    pixel:        'from-indigo-900 to-purple-900',
-    ghibli:       'from-green-200 to-emerald-300',
-    anime:        'from-pink-200 to-purple-300',
-    painting:     'from-amber-100 to-orange-200',
-    dark_fantasy: 'from-gray-800 to-slate-900',
-    lego:         'from-yellow-300 to-red-300',
-    polaroid:     'from-gray-100 to-gray-300',
-    realism:      'from-stone-300 to-stone-500',
-    fantastic:    'from-violet-400 to-fuchsia-500',
+    'None':         'from-gray-100 to-gray-200',
+    'cinematic':    'from-gray-800 to-slate-900',
+    'anime':        'from-pink-200 to-purple-300',
+    'photographic': 'from-stone-300 to-stone-500',
+    'digital art':  'from-violet-400 to-fuchsia-500',
+    'cartoon':      'from-blue-200 to-purple-200',
+    'comic book':   'from-yellow-200 to-orange-200',
+    'fantasy art':  'from-amber-600 to-amber-800',
+    'pixel art':    'from-indigo-900 to-purple-900',
+    'watercolor':   'from-amber-100 to-orange-200',
+    'neon punk':    'from-fuchsia-700 to-indigo-900',
+    '3d model':     'from-blue-300 to-cyan-200',
   }
 
   return (
@@ -448,7 +453,7 @@ function StepArtStyle({ value, onChange }) {
             onClick={() => onChange(s.id)}
             className="overflow-hidden"
           >
-            <div className={`h-14 bg-gradient-to-br ${gradients[s.id]} rounded-t-lg`} />
+            <div className={`h-14 bg-gradient-to-br ${gradients[s.id] || 'from-gray-200 to-gray-300'} rounded-t-lg`} />
             <div className="px-2 py-2 text-center">
               <div className="text-xs font-semibold text-[#1a1a2e] leading-tight">{s.label}</div>
             </div>
@@ -461,28 +466,29 @@ function StepArtStyle({ value, onChange }) {
 
 function StepCaptions({ value, onChange }) {
   const previewStyles = {
-    bold_stroke:   { bg: '#111',    text: '#fff',    fw: '900' },
-    red_highlight: { bg: '#111',    text: '#ef4444', fw: '800' },
-    sleek:         { bg: '#111',    text: '#a78bfa', fw: '600' },
-    karaoke:       { bg: '#111',    text: '#fbbf24', fw: '700' },
-    majestic:      { bg: '#0f072a', text: '#e9d5ff', fw: '700' },
-    beast:         { bg: '#0a0a0a', text: '#ff6b35', fw: '900' },
-    elegant:       { bg: '#111',    text: '#f9fafb', fw: '500' },
-    pixel:         { bg: '#0d1117', text: '#39ff14', fw: '700' },
-    clarity:       { bg: '#111',    text: '#60a5fa', fw: '600' },
+    Hormozi_1: { bg: '#111',    text: '#fff',    fw: '900' },
+    Hormozi_2: { bg: '#111',    text: '#facc15', fw: '900' },
+    Hormozi_3: { bg: '#111',    text: '#a78bfa', fw: '900' },
+    Beast:     { bg: '#0a0a0a', text: '#ff6b35', fw: '900' },
+    Ali:       { bg: '#111',    text: '#60a5fa', fw: '600' },
+    Celine:    { bg: '#0f072a', text: '#e9d5ff', fw: '700' },
+    Dan:       { bg: '#111',    text: '#ef4444', fw: '800' },
+    David:     { bg: '#111',    text: '#fbbf24', fw: '700' },
+    Iman:      { bg: '#111',    text: '#f9fafb', fw: '500' },
   }
+  const DEFAULT_PS = { bg: '#111', text: '#fff', fw: '700' }
 
   return (
     <>
       <PageTitle step={4} title="Caption Style" subtitle="Choose how captions will appear in your video" />
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
         {CAPTION_STYLES.map(c => {
-          const ps = previewStyles[c.id]
+          const ps = previewStyles[c.id] || DEFAULT_PS
           return (
             <SelectCard key={c.id} selected={value === c.id} onClick={() => onChange(c.id)} className="overflow-hidden">
               <div className="h-14 flex items-center justify-center rounded-t-lg" style={{ background: ps.bg }}>
-                <span className="text-sm tracking-wide" style={{ color: ps.text, fontWeight: ps.fw, fontFamily: c.id === 'pixel' ? 'monospace' : 'inherit' }}>
-                  PAGE
+                <span className="text-sm tracking-wide" style={{ color: ps.text, fontWeight: ps.fw }}>
+                  Aa
                 </span>
               </div>
               <div className="px-2 py-2 text-center">
@@ -651,7 +657,6 @@ function StepAccount({ prefs, loading, error, onSubmit }) {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
   const niche = PRESET_NICHES.find(n => n.id === prefs.niche?.id)
-  const voice = VOICES.find(v => v.id === prefs.voice)
   const style = ART_STYLES.find(s => s.id === prefs.artStyle)
 
   return (
@@ -671,7 +676,7 @@ function StepAccount({ prefs, loading, error, onSubmit }) {
           </div>
           <div>
             <div className="text-[#9ca3af] text-xs mb-0.5">Voice</div>
-            <div className="text-[#1a1a2e] font-medium">{voice?.label || '—'}</div>
+            <div className="text-[#1a1a2e] font-medium">{prefs.voice || '—'}</div>
           </div>
           <div>
             <div className="text-[#9ca3af] text-xs mb-0.5">Art style</div>
@@ -732,13 +737,21 @@ function StepAccount({ prefs, loading, error, onSubmit }) {
 
 export default function OnboardingPage() {
   const router = useRouter()
-  const [step, setStep]       = useState(0)
-  const [loading, setLoading] = useState(false)
-  const [error, setError]     = useState('')
+  const [step, setStep]         = useState(0)
+  const [loading, setLoading]   = useState(false)
+  const [error, setError]       = useState('')
+  const [voices, setVoices]     = useState([])
+  const [languages, setLanguages] = useState([])
+
+  useEffect(() => {
+    vadooApi.voices().then(d => setVoices(d.voices || [])).catch(() => {})
+    vadooApi.languages().then(d => setLanguages(d.languages || [])).catch(() => {})
+  }, [])
 
   const [prefs, setPrefs] = useState({
     niche:    { type: 'preset', id: '', description: '', exampleScript: '' },
     voice:    'Onyx',
+    language: 'English',
     music:    { presets: [], tiktokUrls: '' },
     artStyle: '',
     captions: 'Hormozi_1',
@@ -779,7 +792,11 @@ export default function OnboardingPage() {
 
   const stepContent = [
     <StepNiche         key={0} value={prefs.niche}    onChange={update('niche')}    />,
-    <StepVoice         key={1} value={prefs.voice}    onChange={update('voice')}    />,
+    <StepVoice         key={1}
+      value={prefs.voice}           onChangeVoice={update('voice')}
+      language={prefs.language}     onChangeLanguage={update('language')}
+      voices={voices}               languages={languages}
+    />,
     <StepMusic         key={2} value={prefs.music}    onChange={update('music')}    />,
     <StepArtStyle      key={3} value={prefs.artStyle} onChange={update('artStyle')} />,
     <StepCaptions      key={4} value={prefs.captions} onChange={update('captions')} />,
