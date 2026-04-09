@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -264,6 +264,28 @@ function StepNiche({ value, onChange }) {
 }
 
 function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, languages }) {
+  const [playing, setPlaying] = useState(null) // voice id currently playing
+  const audioRef = useRef(null)
+
+  const playPreview = (e, v) => {
+    e.stopPropagation()
+    if (!v.preview_url) return
+
+    // Stop current audio
+    if (audioRef.current) { audioRef.current.pause(); audioRef.current = null }
+
+    if (playing === v.id) {
+      setPlaying(null)
+      return
+    }
+
+    const audio = new Audio(v.preview_url)
+    audioRef.current = audio
+    audio.play().catch(() => {})
+    audio.onended = () => setPlaying(null)
+    setPlaying(v.id)
+  }
+
   const maleVoices   = voices.filter(v => v.gender?.toLowerCase() === 'male')
   const femaleVoices = voices.filter(v => v.gender?.toLowerCase() === 'female')
   const otherVoices  = voices.filter(v => !v.gender || (v.gender.toLowerCase() !== 'male' && v.gender.toLowerCase() !== 'female'))
@@ -325,16 +347,39 @@ function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, l
                     <div className="text-sm font-semibold text-[#1a1a2e]">{v.label}</div>
                     {v.tone && <div className="text-xs text-[#6b7280] mt-0.5">{v.tone}</div>}
                   </div>
-                  {value === v.id && (
-                    <div className="flex items-end gap-0.5 h-4 mr-6">
+                  {/* Playing animation when selected & playing */}
+                  {value === v.id && playing !== v.id && (
+                    <div className="flex items-end gap-0.5 h-4 mr-1">
                       {[3, 5, 4, 6, 3].map((h, i) => (
-                        <div
-                          key={i}
-                          className="w-0.5 rounded-full animate-pulse"
-                          style={{ height: `${h * 2}px`, background: '#6c47ff', animationDelay: `${i * 100}ms` }}
-                        />
+                        <div key={i} className="w-0.5 rounded-full animate-pulse"
+                          style={{ height: `${h * 2}px`, background: '#6c47ff', animationDelay: `${i * 100}ms` }} />
                       ))}
                     </div>
+                  )}
+                  {/* Preview button */}
+                  {v.preview_url && (
+                    <button
+                      type="button"
+                      onClick={(e) => playPreview(e, v)}
+                      className="w-7 h-7 flex items-center justify-center rounded-full flex-shrink-0 transition-colors"
+                      style={{
+                        background: playing === v.id ? '#6c47ff' : '#ede9ff',
+                        color:      playing === v.id ? '#fff'    : '#6c47ff',
+                      }}
+                      title={playing === v.id ? 'Stop preview' : 'Play preview'}
+                    >
+                      {playing === v.id ? (
+                        /* Stop icon */
+                        <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
+                          <rect width="8" height="8" rx="1"/>
+                        </svg>
+                      ) : (
+                        /* Play icon */
+                        <svg width="8" height="9" viewBox="0 0 8 9" fill="currentColor">
+                          <path d="M1 1l6 3.5L1 8V1z"/>
+                        </svg>
+                      )}
+                    </button>
                   )}
                 </SelectCard>
               ))}
