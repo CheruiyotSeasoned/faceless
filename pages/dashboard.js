@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -37,7 +37,6 @@ function VideoCard({ video, onPreview }) {
               alt={video.title || video.topic || 'Video thumbnail'}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
-            {/* Hover overlay with play hint */}
             <div
               className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
               style={{ background: 'rgba(0,0,0,0.4)' }}
@@ -53,12 +52,9 @@ function VideoCard({ video, onPreview }) {
             </div>
           </>
         ) : (
-          // No thumbnail — styled placeholder based on title initials
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-            style={{
-              background: 'linear-gradient(135deg, var(--th-surface-2) 0%, var(--th-accent-lt) 100%)',
-            }}
+            style={{ background: 'linear-gradient(135deg, var(--th-surface-2) 0%, var(--th-accent-lt) 100%)' }}
           >
             <div
               className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black"
@@ -67,30 +63,19 @@ function VideoCard({ video, onPreview }) {
               {(video.title || video.topic || '?')[0].toUpperCase()}
             </div>
             <span className="text-xs font-medium px-3 text-center leading-tight" style={{ color: 'var(--th-text-3)' }}>
-              {video.status === 'processing'
-                ? 'Generating…'
-                : video.status === 'pending'
-                ? 'Queued'
-                : 'No preview'}
+              {video.status === 'processing' ? 'Generating…' : video.status === 'pending' ? 'Queued' : 'No preview'}
             </span>
             {video.status === 'processing' && (
               <div className="w-16 h-0.5 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
-                <div
-                  className="h-full rounded-full animate-pulse"
-                  style={{ width: '60%', background: 'var(--th-accent)' }}
-                />
+                <div className="h-full rounded-full animate-pulse" style={{ width: '60%', background: 'var(--th-accent)' }} />
               </div>
             )}
           </div>
         )}
 
-        {/* Processing bottom bar */}
         {video.status === 'processing' && video.thumbnail_url && (
           <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'var(--th-border)' }}>
-            <div
-              className="h-full animate-pulse rounded-full"
-              style={{ width: '60%', background: 'var(--th-accent)' }}
-            />
+            <div className="h-full animate-pulse rounded-full" style={{ width: '60%', background: 'var(--th-accent)' }} />
           </div>
         )}
 
@@ -100,10 +85,7 @@ function VideoCard({ video, onPreview }) {
       </div>
 
       <div className="p-3">
-        <div
-          className="text-sm font-semibold truncate"
-          style={{ color: 'var(--th-text-1)' }}
-        >
+        <div className="text-sm font-semibold truncate" style={{ color: 'var(--th-text-1)' }}>
           {video.title || video.topic || 'Untitled'}
         </div>
         <div className="text-xs mt-0.5" style={{ color: 'var(--th-text-4)' }}>
@@ -113,6 +95,118 @@ function VideoCard({ video, onPreview }) {
     </div>
   )
 }
+
+function VideoPreviewModal({ video, onClose }) {
+  const videoRef = useRef(null)
+  const [playing, setPlaying] = useState(false)
+
+  useEffect(() => {
+    const handler = (e) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [onClose])
+
+  const handlePlay = () => {
+    setPlaying(true)
+    videoRef.current?.play()
+  }
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(6px)' }}
+      onClick={onClose}
+    >
+      <div
+        className="relative rounded-2xl overflow-hidden flex flex-col"
+        style={{
+          width: '100%',
+          maxWidth: '340px',
+          background: 'var(--th-surface-1)',
+          border: '1px solid var(--th-border)',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: '1px solid var(--th-border)' }}>
+          <div>
+            <div className="text-sm font-semibold truncate" style={{ color: 'var(--th-text-1)', maxWidth: '240px' }}>
+              {video.title || video.topic || 'Untitled'}
+            </div>
+            <div className="text-xs mt-0.5" style={{ color: 'var(--th-text-4)' }}>
+              {new Date(video.created_at).toLocaleDateString()}
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-full flex items-center justify-center"
+            style={{ background: 'var(--th-surface-2)', color: 'var(--th-text-3)' }}
+          >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M1 1l10 10M11 1L1 11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Video */}
+        <div className="aspect-[9/16] relative" style={{ background: '#000' }}>
+          {video.video_url ? (
+            <>
+              <video
+                ref={videoRef}
+                src={video.video_url}
+                poster={video.thumbnail_url || undefined}
+                controls={playing}
+                className="w-full h-full object-cover"
+                onEnded={() => setPlaying(false)}
+              />
+              {!playing && (
+                <div
+                  className="absolute inset-0 flex items-center justify-center"
+                  style={{
+                    background: video.thumbnail_url
+                      ? 'linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%)'
+                      : 'var(--th-surface-2)',
+                  }}
+                >
+                  <button
+                    onClick={handlePlay}
+                    className="w-16 h-16 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+                    style={{ background: 'rgba(124,34,240,0.9)', backdropFilter: 'blur(8px)' }}
+                  >
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                      <path d="M6 4l13 7-13 7V4z" fill="white"/>
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-sm" style={{ color: 'var(--th-text-4)' }}>
+              {video.status === 'processing' ? 'Still generating…' : 'No video available'}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-between px-4 py-3" style={{ borderTop: '1px solid var(--th-border)' }}>
+          <StatusBadge status={video.status} />
+          <Link
+            href={`/video/${video.id}`}
+            className="text-xs font-semibold flex items-center gap-1"
+            style={{ color: 'var(--th-accent)' }}
+          >
+            Open full page
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+              <path d="M2 5.5h7M6 2l3.5 3.5L6 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </Link>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function WelcomeBanner({ user, prefs, onDismiss }) {
   return (
     <div className="card anim-up mb-6 p-5 relative overflow-hidden" style={{ borderColor: 'var(--th-accent)', borderWidth: '1px' }}>
@@ -143,10 +237,11 @@ function WelcomeBanner({ user, prefs, onDismiss }) {
 
 export default function DashboardPage() {
   const router = useRouter()
-  const [user,        setUser]        = useState(null)
-  const [videoList,   setVideoList]   = useState([])
-  const [loading,     setLoading]     = useState(true)
-  const [showWelcome, setShowWelcome] = useState(false)
+  const [user,         setUser]         = useState(null)
+  const [videoList,    setVideoList]    = useState([])
+  const [loading,      setLoading]      = useState(true)
+  const [showWelcome,  setShowWelcome]  = useState(false)
+  const [previewVideo, setPreviewVideo] = useState(null)
 
   useEffect(() => { if (router.query.welcome === '1') setShowWelcome(true) }, [router.query])
 
@@ -187,12 +282,14 @@ export default function DashboardPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-4 mb-6">
-            <Stat label="Credits remaining"   value={user?.credits ?? '—'} />
-            <Stat label="Total videos"        value={videoList.length}      accent="var(--th-text-2)" />
-            <Stat label="Completed"           value={videoList.filter(v => v.status === 'completed').length} accent="#22c55e" />
+            <Stat label="Credits remaining" value={user?.credits ?? '—'} />
+            <Stat label="Total videos"      value={videoList.length}      accent="var(--th-text-2)" />
+            <Stat label="Completed"         value={videoList.filter(v => v.status === 'completed').length} accent="#22c55e" />
           </div>
 
-          {showWelcome && user && <WelcomeBanner user={user} prefs={prefs} onDismiss={() => setShowWelcome(false)} />}
+          {showWelcome && user && (
+            <WelcomeBanner user={user} prefs={prefs} onDismiss={() => setShowWelcome(false)} />
+          )}
 
           {/* Grid */}
           {loading ? (
@@ -221,10 +318,18 @@ export default function DashboardPage() {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {videoList.map(v => <VideoCard key={v.id} video={v} />)}
+              {videoList.map(v => (
+                <VideoCard key={v.id} video={v} onPreview={setPreviewVideo} />
+              ))}
             </div>
           )}
         </div>
+
+        {/* Preview modal */}
+        {previewVideo && (
+          <VideoPreviewModal video={previewVideo} onClose={() => setPreviewVideo(null)} />
+        )}
+
       </AppShell>
     </>
   )
