@@ -21,6 +21,34 @@ function Stat({ label, value, accent }) {
 }
 
 function VideoCard({ video, onPreview }) {
+  const [thumb, setThumb] = useState(video.thumbnail_url || null)
+
+  useEffect(() => {
+    if (thumb || !video.video_url) return
+
+    // Extract first frame from video as thumbnail
+    const vid = document.createElement('video')
+    vid.crossOrigin = 'anonymous'
+    vid.src = video.video_url
+    vid.currentTime = 0.5 // grab frame at 0.5s
+    vid.muted = true
+
+    vid.addEventListener('seeked', () => {
+      try {
+        const canvas = document.createElement('canvas')
+        canvas.width  = vid.videoWidth
+        canvas.height = vid.videoHeight
+        canvas.getContext('2d').drawImage(vid, 0, 0)
+        setThumb(canvas.toDataURL('image/jpeg'))
+      } catch {
+        // CORS blocked — leave thumb null, placeholder shows
+      }
+    })
+
+    vid.addEventListener('loadedmetadata', () => { vid.currentTime = 0.5 })
+    vid.load()
+  }, [video.video_url])
+
   return (
     <div
       onClick={() => onPreview(video)}
@@ -30,10 +58,10 @@ function VideoCard({ video, onPreview }) {
         className="aspect-[9/16] overflow-hidden rounded-t-xl relative"
         style={{ background: 'var(--th-surface-2)' }}
       >
-        {video.thumbnail_url ? (
+        {thumb ? (
           <>
             <img
-              src={video.thumbnail_url}
+              src={thumb}
               alt={video.title || video.topic || 'Video thumbnail'}
               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             />
@@ -56,24 +84,32 @@ function VideoCard({ video, onPreview }) {
             className="absolute inset-0 flex flex-col items-center justify-center gap-2"
             style={{ background: 'linear-gradient(135deg, var(--th-surface-2) 0%, var(--th-accent-lt) 100%)' }}
           >
-            <div
-              className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black"
-              style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)' }}
-            >
-              {(video.title || video.topic || '?')[0].toUpperCase()}
-            </div>
-            <span className="text-xs font-medium px-3 text-center leading-tight" style={{ color: 'var(--th-text-3)' }}>
-              {video.status === 'processing' ? 'Generating…' : video.status === 'pending' ? 'Queued' : 'No preview'}
-            </span>
-            {video.status === 'processing' && (
-              <div className="w-16 h-0.5 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
-                <div className="h-full rounded-full animate-pulse" style={{ width: '60%', background: 'var(--th-accent)' }} />
-              </div>
+            {video.video_url ? (
+              // Has video but thumb not ready yet — show mini spinner
+              <div className="w-6 h-6 rounded-full border-2 border-t-transparent animate-spin"
+                style={{ borderColor: 'var(--th-accent)', borderTopColor: 'transparent' }} />
+            ) : (
+              <>
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black"
+                  style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)' }}
+                >
+                  {(video.title || video.topic || '?')[0].toUpperCase()}
+                </div>
+                <span className="text-xs font-medium px-3 text-center leading-tight" style={{ color: 'var(--th-text-3)' }}>
+                  {video.status === 'processing' ? 'Generating…' : video.status === 'pending' ? 'Queued' : 'No preview'}
+                </span>
+                {video.status === 'processing' && (
+                  <div className="w-16 h-0.5 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
+                    <div className="h-full rounded-full animate-pulse" style={{ width: '60%', background: 'var(--th-accent)' }} />
+                  </div>
+                )}
+              </>
             )}
           </div>
         )}
 
-        {video.status === 'processing' && video.thumbnail_url && (
+        {video.status === 'processing' && thumb && (
           <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'var(--th-border)' }}>
             <div className="h-full animate-pulse rounded-full" style={{ width: '60%', background: 'var(--th-accent)' }} />
           </div>
