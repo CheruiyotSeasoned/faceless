@@ -24,6 +24,22 @@ function VideoCard({ video, onPreview }) {
   const vidRef = useRef(null)
   const [thumbReady, setThumbReady] = useState(false)
 
+  useEffect(() => {
+    const vid = vidRef.current
+    if (!vid || !video.video_url) return
+
+    const onSeeked = () => setThumbReady(true)
+    const onCanPlay = () => { vid.currentTime = 0.5 }
+
+    vid.addEventListener('canplay', onCanPlay)
+    vid.addEventListener('seeked', onSeeked)
+
+    return () => {
+      vid.removeEventListener('canplay', onCanPlay)
+      vid.removeEventListener('seeked', onSeeked)
+    }
+  }, [video.video_url])
+
   return (
     <div
       onClick={() => onPreview(video)}
@@ -35,38 +51,36 @@ function VideoCard({ video, onPreview }) {
       >
         {video.video_url ? (
           <>
-            {/* Actual video element parked at frame 0 — acts as thumbnail */}
             <video
               ref={vidRef}
               src={video.video_url}
               className="w-full h-full object-cover"
-              style={{ opacity: thumbReady ? 1 : 0, transition: 'opacity 0.3s' }}
+              style={{ opacity: thumbReady ? 1 : 0, transition: 'opacity 0.4s' }}
               muted
               playsInline
-              preload="metadata"
-              onLoadedMetadata={() => {
-                if (vidRef.current) {
-                  vidRef.current.currentTime = 0.5
-                }
-              }}
-              onSeeked={() => setThumbReady(true)}
+              preload="auto"
             />
 
-            {/* Placeholder while video metadata loads */}
             {!thumbReady && (
-              <div className="absolute inset-0 flex items-center justify-center"
+              <div
+                className="absolute inset-0 flex flex-col items-center justify-center gap-2"
                 style={{ background: 'linear-gradient(135deg, var(--th-surface-2) 0%, var(--th-accent-lt) 100%)' }}
               >
-                <div className="w-6 h-6 rounded-full border-2 animate-spin"
+                <div
+                  className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black"
+                  style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)' }}
+                >
+                  {(video.title || video.topic || '?')[0].toUpperCase()}
+                </div>
+                <div className="w-5 h-5 rounded-full border-2 animate-spin mt-1"
                   style={{ borderColor: 'var(--th-accent)', borderTopColor: 'transparent' }} />
               </div>
             )}
 
-            {/* Hover play overlay */}
             {thumbReady && (
               <div
                 className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
-                style={{ background: 'rgba(0,0,0,0.4)' }}
+                style={{ background: 'rgba(0,0,0,0.45)' }}
               >
                 <div
                   className="w-10 h-10 rounded-full flex items-center justify-center"
@@ -80,7 +94,6 @@ function VideoCard({ video, onPreview }) {
             )}
           </>
         ) : (
-          /* No video at all — status placeholder */
           <div
             className="absolute inset-0 flex flex-col items-center justify-center gap-2"
             style={{ background: 'linear-gradient(135deg, var(--th-surface-2) 0%, var(--th-accent-lt) 100%)' }}
