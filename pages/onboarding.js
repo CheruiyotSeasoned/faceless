@@ -356,18 +356,20 @@ function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, l
                       ))}
                     </div>
                   )}
-                  {/* Preview button */}
-                  {v.preview_url && (
-                    <button
-                      type="button"
-                      onClick={(e) => playPreview(e, v)}
-                      className="w-7 h-7 flex items-center justify-center rounded-full flex-shrink-0 transition-colors"
-                      style={{
-                        background: playing === v.id ? '#6c47ff' : '#ede9ff',
-                        color:      playing === v.id ? '#fff'    : '#6c47ff',
-                      }}
-                      title={playing === v.id ? 'Stop preview' : 'Play preview'}
-                    >
+                  {/* Preview button — always shown, disabled when no URL */}
+                  <button
+                    type="button"
+                    onClick={(e) => playPreview(e, v)}
+                    disabled={!v.preview_url}
+                    className="w-7 h-7 flex items-center justify-center rounded-full flex-shrink-0 transition-colors"
+                    style={{
+                      background: playing === v.id ? '#6c47ff' : '#ede9ff',
+                      color:      playing === v.id ? '#fff'    : '#6c47ff',
+                      opacity:    v.preview_url ? 1 : 0.35,
+                      cursor:     v.preview_url ? 'pointer' : 'default',
+                    }}
+                    title={v.preview_url ? (playing === v.id ? 'Stop preview' : 'Play preview') : 'No preview available'}
+                  >
                       {playing === v.id ? (
                         /* Stop icon */
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="currentColor">
@@ -380,7 +382,6 @@ function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, l
                         </svg>
                       )}
                     </button>
-                  )}
                 </SelectCard>
               ))}
             </div>

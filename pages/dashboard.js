@@ -20,45 +20,99 @@ function Stat({ label, value, accent }) {
   )
 }
 
-function VideoCard({ video }) {
+function VideoCard({ video, onPreview }) {
   return (
-    <Link href={`/video/${video.id}`} className="card-hover overflow-hidden block group">
-      <div className="aspect-[9/16] overflow-hidden rounded-t-xl relative" style={{ background: 'var(--th-surface-2)' }}>
-        {video.thumbnail_url
-          ? <img src={video.thumbnail_url} alt="" className="w-full h-full object-cover" />
-          : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5">
-              <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: 'var(--th-accent-lt)' }}>
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                  <rect x="1" y="2.5" width="9" height="10" rx="1.5" stroke="var(--th-accent)" strokeWidth="1.3"/>
-                  <path d="M10 6l3.5-2v7L10 9" stroke="var(--th-accent)" strokeWidth="1.3" strokeLinejoin="round"/>
+    <div
+      onClick={() => onPreview(video)}
+      className="card-hover overflow-hidden block group cursor-pointer"
+    >
+      <div
+        className="aspect-[9/16] overflow-hidden rounded-t-xl relative"
+        style={{ background: 'var(--th-surface-2)' }}
+      >
+        {video.thumbnail_url ? (
+          <>
+            <img
+              src={video.thumbnail_url}
+              alt={video.title || video.topic || 'Video thumbnail'}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+            {/* Hover overlay with play hint */}
+            <div
+              className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+              style={{ background: 'rgba(0,0,0,0.4)' }}
+            >
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center"
+                style={{ background: 'rgba(124,34,240,0.9)', backdropFilter: 'blur(4px)' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                  <path d="M3 2l9 5-9 5V2z" fill="white"/>
                 </svg>
               </div>
-              {video.status === 'processing' && (
-                <span className="text-xs font-medium anim-fade" style={{ color: 'var(--th-accent)' }}>Generating…</span>
-              )}
             </div>
-          )
-        }
-        {video.status === 'processing' && (
-          <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'var(--th-border)' }}>
-            <div className="h-full animate-pulse rounded-full" style={{ width: '60%', background: 'var(--th-accent)' }} />
+          </>
+        ) : (
+          // No thumbnail — styled placeholder based on title initials
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+            style={{
+              background: 'linear-gradient(135deg, var(--th-surface-2) 0%, var(--th-accent-lt) 100%)',
+            }}
+          >
+            <div
+              className="w-12 h-12 rounded-2xl flex items-center justify-center text-lg font-black"
+              style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)' }}
+            >
+              {(video.title || video.topic || '?')[0].toUpperCase()}
+            </div>
+            <span className="text-xs font-medium px-3 text-center leading-tight" style={{ color: 'var(--th-text-3)' }}>
+              {video.status === 'processing'
+                ? 'Generating…'
+                : video.status === 'pending'
+                ? 'Queued'
+                : 'No preview'}
+            </span>
+            {video.status === 'processing' && (
+              <div className="w-16 h-0.5 rounded-full overflow-hidden" style={{ background: 'var(--th-border)' }}>
+                <div
+                  className="h-full rounded-full animate-pulse"
+                  style={{ width: '60%', background: 'var(--th-accent)' }}
+                />
+              </div>
+            )}
           </div>
         )}
-        <div className="absolute top-2 left-2"><StatusBadge status={video.status} /></div>
+
+        {/* Processing bottom bar */}
+        {video.status === 'processing' && video.thumbnail_url && (
+          <div className="absolute bottom-0 left-0 right-0 h-0.5" style={{ background: 'var(--th-border)' }}>
+            <div
+              className="h-full animate-pulse rounded-full"
+              style={{ width: '60%', background: 'var(--th-accent)' }}
+            />
+          </div>
+        )}
+
+        <div className="absolute top-2 left-2">
+          <StatusBadge status={video.status} />
+        </div>
       </div>
+
       <div className="p-3">
-        <div className="text-sm font-semibold truncate transition-colors" style={{ color: 'var(--th-text-1)' }}>
+        <div
+          className="text-sm font-semibold truncate"
+          style={{ color: 'var(--th-text-1)' }}
+        >
           {video.title || video.topic || 'Untitled'}
         </div>
         <div className="text-xs mt-0.5" style={{ color: 'var(--th-text-4)' }}>
           {new Date(video.created_at).toLocaleDateString()}
         </div>
       </div>
-    </Link>
+    </div>
   )
 }
-
 function WelcomeBanner({ user, prefs, onDismiss }) {
   return (
     <div className="card anim-up mb-6 p-5 relative overflow-hidden" style={{ borderColor: 'var(--th-accent)', borderWidth: '1px' }}>
