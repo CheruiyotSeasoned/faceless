@@ -7,16 +7,16 @@ import { auth, videos as videosApi, onboarding as ob, vadoo as vadooApi } from '
 // ── Static data ───────────────────────────────────────────────────────────────
 
 const NICHES = [
-  { id: 'Motivational',        label: 'Motivation',      emoji: '🔥' },
-  { id: 'Fun Facts',           label: 'Did You Know',    emoji: '🧠' },
-  { id: 'Scary Stories',       label: 'Scary Stories',   emoji: '👻' },
-  { id: 'Interesting History', label: 'History',         emoji: '⚔️' },
-  { id: 'Random AI Story',     label: 'AI Story',        emoji: '🤖' },
-  { id: 'Philosophy',          label: 'Philosophy',      emoji: '💭' },
-  { id: 'Life Pro Tips',       label: 'Life Tips',       emoji: '💡' },
-  { id: 'ELI5',                label: 'Explain It',      emoji: '📚' },
-  { id: 'Long Form Jokes',     label: 'Jokes',           emoji: '😂' },
-  { id: 'Bedtime Stories',     label: 'Bedtime',         emoji: '🌙' },
+  { id: 'Motivational',        label: 'Motivation'    },
+  { id: 'Fun Facts',           label: 'Did You Know'  },
+  { id: 'Scary Stories',       label: 'Scary Stories' },
+  { id: 'Interesting History', label: 'History'       },
+  { id: 'Random AI Story',     label: 'AI Story'      },
+  { id: 'Philosophy',          label: 'Philosophy'    },
+  { id: 'Life Pro Tips',       label: 'Life Tips'     },
+  { id: 'ELI5',                label: 'Explain It'    },
+  { id: 'Long Form Jokes',     label: 'Jokes'         },
+  { id: 'Bedtime Stories',     label: 'Bedtime'       },
 ]
 
 const PROMPT_EXAMPLES = [
@@ -38,18 +38,18 @@ const VOICES = [
 ]
 
 const ART_STYLES = [
-  { id: 'None',         label: 'No Style',    emoji: '⬜' },
-  { id: 'cinematic',    label: 'Cinematic',   emoji: '🎬' },
-  { id: 'anime',        label: 'Anime',       emoji: '⛩️' },
-  { id: 'photographic', label: 'Photo',       emoji: '📷' },
-  { id: 'digital art',  label: 'Digital',     emoji: '🖥️' },
-  { id: 'cartoon',      label: 'Cartoon',     emoji: '🎨' },
-  { id: 'comic book',   label: 'Comic',       emoji: '💥' },
-  { id: 'fantasy art',  label: 'Fantasy',     emoji: '🧙' },
-  { id: 'pixel art',    label: 'Pixel',       emoji: '👾' },
-  { id: 'watercolor',   label: 'Watercolor',  emoji: '🎭' },
-  { id: 'neon punk',    label: 'Neon Punk',   emoji: '⚡' },
-  { id: '3d model',     label: '3D Model',    emoji: '🔮' },
+  { id: 'None',         label: 'No Style'   },
+  { id: 'cinematic',    label: 'Cinematic'  },
+  { id: 'anime',        label: 'Anime'      },
+  { id: 'photographic', label: 'Photo'      },
+  { id: 'digital art',  label: 'Digital'    },
+  { id: 'cartoon',      label: 'Cartoon'    },
+  { id: 'comic book',   label: 'Comic'      },
+  { id: 'fantasy art',  label: 'Fantasy'    },
+  { id: 'pixel art',    label: 'Pixel'      },
+  { id: 'watercolor',   label: 'Watercolor' },
+  { id: 'neon punk',    label: 'Neon Punk'  },
+  { id: '3d model',     label: '3D Model'   },
 ]
 
 const CAPTIONS = [
@@ -78,15 +78,15 @@ const RATIOS = [
 ]
 
 const MUSIC = [
-  { id: '',          label: 'None',       emoji: '🔇' },
-  { id: 'Cinematic', label: 'Cinematic',  emoji: '🎻' },
-  { id: 'Epic',      label: 'Epic',       emoji: '🥁' },
-  { id: 'Upbeat',    label: 'Upbeat',     emoji: '🎸' },
-  { id: 'Happy',     label: 'Happy',      emoji: '😊' },
-  { id: 'Sad',       label: 'Sad',        emoji: '💧' },
-  { id: 'Suspense',  label: 'Suspense',   emoji: '😰' },
-  { id: 'Lo-Fi',     label: 'Lo-Fi',      emoji: '🎧' },
-  { id: 'Corporate', label: 'Corporate',  emoji: '💼' },
+  { id: '',          label: 'None'      },
+  { id: 'Cinematic', label: 'Cinematic' },
+  { id: 'Epic',      label: 'Epic'      },
+  { id: 'Upbeat',    label: 'Upbeat'    },
+  { id: 'Happy',     label: 'Happy'     },
+  { id: 'Sad',       label: 'Sad'       },
+  { id: 'Suspense',  label: 'Suspense'  },
+  { id: 'Lo-Fi',     label: 'Lo-Fi'     },
+  { id: 'Corporate', label: 'Corporate' },
 ]
 
 const NICHE_MAP = {
@@ -102,13 +102,13 @@ function SectionHead({ step, title, subtitle }) {
   return (
     <div className="flex items-start gap-3 mb-4">
       <div style={{
-        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-        background: 'var(--th-accent-lt)', color: 'var(--th-accent)',
+        width: 22, height: 22, borderRadius: 6, flexShrink: 0,
+        background: 'var(--th-surface-2)', color: 'var(--th-text-4)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 12, fontWeight: 800,
+        fontSize: 11, fontWeight: 600, border: '1px solid var(--th-border)',
       }}>{step}</div>
       <div>
-        <div className="font-bold text-sm" style={{ color: 'var(--th-text-1)' }}>{title}</div>
+        <div className="text-sm font-semibold" style={{ color: 'var(--th-text-1)' }}>{title}</div>
         {subtitle && <div className="text-xs mt-0.5" style={{ color: 'var(--th-text-4)' }}>{subtitle}</div>}
       </div>
     </div>
@@ -267,17 +267,16 @@ export default function CreatePage() {
 
           {/* ── Credits banner ── */}
           {user && !canGenerate && (
-            <div className="rounded-2xl p-4 mb-5 flex items-start gap-3"
+            <div className="rounded-xl p-4 mb-5 flex items-start gap-3"
               style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.2)' }}>
-              <span style={{ fontSize: 20 }}>⚠️</span>
               <div className="flex-1">
-                <div className="font-semibold text-sm mb-0.5" style={{ color: 'var(--th-text-1)' }}>
-                  {credits === 0 ? 'No credits left' : `Only ${credits} credits — need 50 to generate`}
+                <div className="text-sm mb-0.5" style={{ color: 'var(--th-text-1)' }}>
+                  {credits === 0 ? 'No credits remaining' : `${credits} credits available — 50 needed to generate a video`}
                 </div>
                 <p className="text-xs mb-2" style={{ color: 'var(--th-text-3)' }}>
-                  Each video costs 50 credits. Upgrade to get more.
+                  Upgrade your plan to continue creating videos.
                 </p>
-                <a href="/billing" className="btn-primary text-xs px-4 py-1.5 inline-block">Upgrade plan →</a>
+                <a href="/billing" className="btn-primary text-xs px-4 py-1.5 inline-block">Upgrade plan</a>
               </div>
             </div>
           )}
@@ -285,20 +284,16 @@ export default function CreatePage() {
           {/* ── Page header ── */}
           <div className="mb-6 flex items-start justify-between gap-4 flex-wrap">
             <div>
-              <h1 className="text-2xl font-black" style={{ color: 'var(--th-text-1)' }}>Create a video</h1>
-              <p className="text-sm mt-1" style={{ color: 'var(--th-text-4)' }}>
-                Script · Voiceover · Visuals · Captions · Music — fully produced in ~3 minutes
+              <h1 className="text-xl font-bold" style={{ color: 'var(--th-text-1)' }}>Create a video</h1>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-4)' }}>
+                Fill in the form below. Your video will be ready in about 3 minutes.
               </p>
             </div>
             {user && (
-              <div className="rounded-xl px-3 py-2 flex items-center gap-2 flex-shrink-0"
+              <div className="rounded-lg px-3 py-1.5 flex items-center gap-1.5 flex-shrink-0"
                 style={{ background: 'var(--th-surface)', border: '1px solid var(--th-border)' }}>
-                <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                  <circle cx="7" cy="7" r="6" stroke="var(--th-accent)" strokeWidth="1.3"/>
-                  <path d="M7 4v3l2 2" stroke="var(--th-accent)" strokeWidth="1.3" strokeLinecap="round"/>
-                </svg>
-                <span className="text-sm font-bold" style={{ color: 'var(--th-accent)' }}>{credits}</span>
-                <span className="text-xs" style={{ color: 'var(--th-text-4)' }}>credits</span>
+                <span className="text-sm" style={{ color: 'var(--th-accent)' }}>{credits}</span>
+                <span className="text-xs" style={{ color: 'var(--th-text-4)' }}>credits remaining</span>
               </div>
             )}
           </div>
@@ -307,26 +302,24 @@ export default function CreatePage() {
 
             {/* ══ STEP 1 — Describe your video ══ */}
             <div className="create-card">
-              <SectionHead step="1" title="Describe your video"
-                subtitle="Write what you want the video to be about — or pick a niche below" />
+              <SectionHead step="1" title="What should the video be about?"
+                subtitle="Write a description, or just pick a topic below and leave this blank" />
 
               <textarea
                 className="input prompt-area"
-                placeholder={`e.g. "${PROMPT_EXAMPLES[exampleIdx]}"`}
+                placeholder={`e.g. ${PROMPT_EXAMPLES[exampleIdx]}`}
                 value={form.prompt}
                 onChange={e => set('prompt', e.target.value)}
-                required={form.topic === 'Custom'}
               />
-              <p className="text-xs mt-2 mb-4" style={{ color: 'var(--th-text-4)' }}>
-                💡 Be specific — mention tone, audience, and key points for the best results.
-                Leave blank to let the AI decide based on your niche below.
+              <p className="text-xs mt-1.5 mb-4" style={{ color: 'var(--th-text-4)' }}>
+                Tip: mention the tone, audience, or key points you want covered. The more specific, the better the script.
               </p>
 
               {/* Niche quick-pick */}
-              <div className="text-xs font-semibold mb-2" style={{ color: 'var(--th-text-3)' }}>
-                Or pick a niche topic:
+              <div className="text-xs mb-2" style={{ color: 'var(--th-text-4)' }}>
+                Pick a topic category (optional):
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {NICHES.map(n => {
                   const selected = form.topic === n.id
                   return (
@@ -335,13 +328,12 @@ export default function CreatePage() {
                       style={{
                         padding: '5px 12px', borderRadius: 20, cursor: 'pointer', fontSize: 12,
                         border: selected ? '1.5px solid var(--th-accent)' : '1px solid var(--th-border)',
-                        background: selected ? 'var(--th-accent-lt)' : 'var(--th-surface-2)',
+                        background: selected ? 'var(--th-accent-lt)' : 'transparent',
                         color: selected ? 'var(--th-accent)' : 'var(--th-text-3)',
-                        fontWeight: selected ? 700 : 500,
-                        display: 'flex', alignItems: 'center', gap: 5,
+                        fontWeight: selected ? 600 : 400,
                         transition: 'all 0.15s',
                       }}>
-                      <span>{n.emoji}</span>{n.label}
+                      {n.label}
                     </button>
                   )
                 })}
@@ -349,15 +341,15 @@ export default function CreatePage() {
               {form.topic !== 'Custom' && (
                 <p className="text-xs mt-3 rounded-lg px-3 py-2"
                   style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
-                  ✓ Topic set to <strong>{form.topic}</strong>. Your prompt above will guide the specific angle — or leave it empty for a fully AI-generated script.
+                  Topic: {form.topic}. You can also add a prompt above to guide the specific angle.
                 </p>
               )}
             </div>
 
             {/* ══ STEP 2 — Voice ══ */}
             <div className="create-card">
-              <SectionHead step="2" title="Choose a voice"
-                subtitle="The AI narrator for your video" />
+              <SectionHead step="2" title="Narrator voice"
+                subtitle="The AI voice that will read the script" />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8 }}>
                 {VOICES.map(v => (
                   <button key={v.id} type="button"
@@ -389,14 +381,14 @@ export default function CreatePage() {
             {/* ══ STEP 3 — Style ══ */}
             <div className="create-card">
               <SectionHead step="3" title="Visual style"
-                subtitle="The art style for the AI-generated background visuals" />
+                subtitle="Background visuals generated for each scene" />
               <PillGroup options={ART_STYLES} value={form.style} onChange={v => set('style', v)} />
             </div>
 
             {/* ══ STEP 4 — Captions ══ */}
             <div className="create-card">
               <SectionHead step="4" title="Caption style"
-                subtitle="The on-screen text style — pick what fits your vibe" />
+                subtitle="On-screen text style. Hormozi is popular on TikTok." />
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: 8 }}>
                 {CAPTIONS.map(c => {
                   const sel = form.theme === c.id
@@ -420,7 +412,7 @@ export default function CreatePage() {
             {/* ══ STEP 5 — Format ══ */}
             <div className="create-card">
               <SectionHead step="5" title="Format & music"
-                subtitle="Duration, aspect ratio, and background music" />
+                subtitle="Use 9:16 for TikTok and Reels. 30–60s performs best on short-form." />
               <div className="grid gap-5">
                 <div>
                   <div className="text-xs font-semibold mb-2" style={{ color: 'var(--th-text-3)' }}>Duration</div>
@@ -441,14 +433,7 @@ export default function CreatePage() {
             <div className="create-card">
               <button type="button" className="adv-toggle w-full justify-between"
                 onClick={() => setShowAdv(o => !o)}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                    <circle cx="7" cy="4" r="1.5" fill="currentColor"/>
-                    <circle cx="7" cy="7" r="1.5" fill="currentColor"/>
-                    <circle cx="7" cy="10" r="1.5" fill="currentColor"/>
-                  </svg>
-                  Advanced options
-                </span>
+                <span>More options (language, article URL, extra instructions)</span>
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
                   style={{ transition: 'transform 0.2s', transform: showAdv ? 'rotate(180deg)' : 'none' }}>
                   <path d="M3 5l4 4 4-4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
@@ -474,9 +459,6 @@ export default function CreatePage() {
                     <textarea className="input resize-none text-sm" rows={3}
                       placeholder="e.g. Keep it under 60 words per scene. Target audience: college students. Use a serious, no-fluff tone."
                       value={form.custom_instructions} onChange={e => set('custom_instructions', e.target.value)} />
-                    <p className="text-xs mt-1" style={{ color: 'var(--th-text-4)' }}>
-                      Use this to fine-tune tone, audience, pacing, or anything the AI should keep in mind.
-                    </p>
                   </div>
                 </div>
               )}
@@ -500,19 +482,15 @@ export default function CreatePage() {
             )}
 
             {/* ── Submit ── */}
-            <div className="rounded-2xl p-5"
-              style={{ background: 'linear-gradient(135deg, rgba(92,30,255,0.1), rgba(139,61,255,0.06))', border: '1px solid var(--th-accent-md)' }}>
-              <div className="flex items-start gap-4 flex-wrap">
-                <div className="flex-1" style={{ minWidth: 200 }}>
-                  <div className="font-bold text-sm mb-1" style={{ color: 'var(--th-text-1)' }}>Ready to generate</div>
-                  <div className="text-xs" style={{ color: 'var(--th-text-4)' }}>
-                    Your video will be ready in ~3 minutes. You'll get an email when it's done.
-                    <br />Failed generations are automatically refunded.
-                  </div>
-                </div>
+            <div className="rounded-xl p-4"
+              style={{ background: 'var(--th-surface)', border: '1px solid var(--th-border)' }}>
+              <div className="flex items-center gap-4 flex-wrap justify-between">
+                <p className="text-xs" style={{ color: 'var(--th-text-4)' }}>
+                  Ready in ~3 min &nbsp;·&nbsp; Email notification when done &nbsp;·&nbsp; Credits refunded if generation fails
+                </p>
                 <button type="submit" disabled={loading || !user || !canGenerate}
-                  className="btn-primary flex items-center gap-2.5 flex-shrink-0"
-                  style={{ opacity: canGenerate ? 1 : 0.5, cursor: canGenerate ? 'pointer' : 'not-allowed', padding: '12px 24px', fontSize: 14 }}>
+                  className="btn-primary flex items-center gap-2 flex-shrink-0"
+                  style={{ opacity: canGenerate ? 1 : 0.5, cursor: canGenerate ? 'pointer' : 'not-allowed' }}>
                   {loading ? (
                     <>
                       <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
@@ -523,13 +501,10 @@ export default function CreatePage() {
                     </>
                   ) : (
                     <>
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M4 3l9 5-9 5V3z" fill="white"/>
-                      </svg>
                       Generate video
                       <span style={{
-                        background: 'rgba(255,255,255,0.2)', padding: '2px 8px', borderRadius: 6,
-                        fontSize: 11, fontWeight: 700,
+                        background: 'rgba(255,255,255,0.18)', padding: '1px 7px', borderRadius: 5,
+                        fontSize: 11,
                       }}>50 credits</span>
                     </>
                   )}
