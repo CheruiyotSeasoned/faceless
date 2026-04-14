@@ -309,7 +309,11 @@ export default function CreatePage() {
                 className="input prompt-area"
                 placeholder={`e.g. ${PROMPT_EXAMPLES[exampleIdx]}`}
                 value={form.prompt}
-                onChange={e => set('prompt', e.target.value)}
+                onChange={e => {
+                  set('prompt', e.target.value)
+                  // Deselect niche when user types a custom prompt
+                  if (e.target.value && form.topic !== 'Custom') set('topic', 'Custom')
+                }}
               />
               <p className="text-xs mt-1.5 mb-4" style={{ color: 'var(--th-text-4)' }}>
                 Tip: mention the tone, audience, or key points you want covered. The more specific, the better the script.
@@ -324,7 +328,11 @@ export default function CreatePage() {
                   const selected = form.topic === n.id
                   return (
                     <button key={n.id} type="button"
-                      onClick={() => set('topic', selected ? 'Custom' : n.id)}
+                      onClick={() => {
+                        set('topic', selected ? 'Custom' : n.id)
+                        // Clear prompt when picking a niche
+                        if (!selected) set('prompt', '')
+                      }}
                       style={{
                         padding: '5px 12px', borderRadius: 20, cursor: 'pointer', fontSize: 12,
                         border: selected ? '1.5px solid var(--th-accent)' : '1px solid var(--th-border)',
