@@ -124,16 +124,153 @@ const TESTIMONIALS = [
   { name: 'David M.',  handle: '@historyunlocked',  avatar: 'DM', quote: 'As someone with zero video editing skills, this platform is a game changer. The cinematic style looks genuinely professional.', metric: '34K subscribers' },
 ]
 
-function PhoneCard({ item, rotate }) {
+function VideoModal({ item, onClose }) {
+  if (!item) return null
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 9999,
+        background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '20px',
+        animation: 'fadeIn 0.2s ease',
+      }}
+    >
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+        @keyframes slideUp { from { transform: translateY(40px) scale(0.95); opacity: 0 } to { transform: translateY(0) scale(1); opacity: 1 } }
+      `}</style>
+
+      {/* Close button */}
+      <button
+        onClick={onClose}
+        style={{
+          position: 'absolute', top: 20, right: 20,
+          width: 40, height: 40, borderRadius: '50%',
+          background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.2)',
+          color: 'white', fontSize: 20, cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          zIndex: 1,
+        }}
+      >×</button>
+
+      {/* Phone shell */}
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          width: 320, height: 570, borderRadius: 44, overflow: 'hidden',
+          position: 'relative', background: item.bg,
+          boxShadow: '0 40px 120px rgba(0,0,0,0.8), 0 0 0 2px rgba(255,255,255,0.1)',
+          animation: 'slideUp 0.25s ease',
+        }}
+      >
+        {/* Dynamic Island */}
+        <div style={{
+          position: 'absolute', top: 12, left: '50%', transform: 'translateX(-50%)',
+          width: 90, height: 26, borderRadius: 20,
+          background: '#000', zIndex: 10,
+        }} />
+
+        {item.video_url ? (
+          <video
+            src={item.video_url}
+            autoPlay
+            controls
+            loop
+            playsInline
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
+          />
+        ) : (
+          <div style={{ position: 'absolute', inset: 0, background: item.bg, zIndex: 0 }} />
+        )}
+
+        {/* Gradient overlay */}
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 1, pointerEvents: 'none',
+          background: 'linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.2) 100%)',
+        }} />
+
+        {/* Niche tag */}
+        <div style={{ position: 'absolute', top: 52, left: 18, zIndex: 4 }}>
+          <span style={{
+            background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(6px)',
+            color: 'white', fontSize: 11, fontWeight: 800,
+            padding: '3px 10px', borderRadius: 20,
+            border: '0.5px solid rgba(255,255,255,0.18)',
+            letterSpacing: '0.06em', textTransform: 'uppercase',
+          }}>{item.niche}</span>
+        </div>
+
+        {/* Right actions */}
+        <div style={{
+          position: 'absolute', right: 12, bottom: 120, zIndex: 4,
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 18,
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 28, lineHeight: 1 }}>❤️</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginTop: 2 }}>{item.likes}</div>
+          </div>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ fontSize: 22, lineHeight: 1 }}>💬</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.9)', fontWeight: 600, marginTop: 2 }}>{item.comments}</div>
+          </div>
+        </div>
+
+        {/* Caption */}
+        <div style={{ position: 'absolute', bottom: 90, left: 0, right: 56, padding: '0 18px', zIndex: 4 }}>
+          <p style={{
+            color: 'white', fontSize: 14, fontWeight: 800,
+            lineHeight: 1.4, textShadow: '0 1px 6px rgba(0,0,0,0.9)',
+            textTransform: 'uppercase',
+          }}>{item.caption}</p>
+        </div>
+
+        {/* Bottom bar */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: 80,
+          background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(10px)',
+          display: 'flex', alignItems: 'center', gap: 12, padding: '0 16px', zIndex: 4,
+        }}>
+          <div style={{
+            width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+            background: item.avatarBg, border: '2px solid rgba(255,255,255,0.3)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: 11, color: 'white', fontWeight: 800,
+          }}>{item.avatar}</div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 13, color: 'white', fontWeight: 700 }}>{item.username}</div>
+            <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 1 }}>{item.desc}</div>
+          </div>
+          <div style={{
+            fontSize: 11, fontWeight: 800, color: '#a78bfa',
+            border: '1.5px solid #a78bfa', padding: '4px 12px', borderRadius: 14, flexShrink: 0,
+          }}>Follow</div>
+        </div>
+      </div>
+
+      {/* Hint */}
+      <p style={{
+        position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
+        color: 'rgba(255,255,255,0.35)', fontSize: 13, whiteSpace: 'nowrap',
+      }}>Click anywhere outside to close</p>
+    </div>
+  )
+}
+
+function PhoneCard({ item, rotate, onOpen }) {
   return (
     <div style={{ transform: `rotate(${rotate}deg)`, transition: 'transform 0.3s ease' }}
       className="group flex-shrink-0">
-      <div style={{
-        width: 152, height: 272, borderRadius: 24, overflow: 'hidden', position: 'relative',
-        background: item.bg,
-        boxShadow: '0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
-        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-      }}>
+      <div
+        onClick={() => item.video_url && onOpen(item)}
+        style={{
+          width: 152, height: 272, borderRadius: 24, overflow: 'hidden', position: 'relative',
+          background: item.bg,
+          boxShadow: '0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06)',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          cursor: item.video_url ? 'pointer' : 'default',
+        }}>
 
         {/* Status bar */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 12px 4px', position: 'relative', zIndex: 3 }}>
@@ -154,6 +291,27 @@ function PhoneCard({ item, rotate }) {
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} />
         ) : (
           <div style={{ position: 'absolute', inset: 0, background: item.bg, zIndex: 0 }} />
+        )}
+
+        {/* Play button — appears on hover */}
+        {item.video_url && (
+          <div className="group-hover:opacity-100" style={{
+            position: 'absolute', inset: 0, zIndex: 5,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            opacity: 0, transition: 'opacity 0.2s ease',
+            background: 'rgba(0,0,0,0.3)',
+          }}>
+            <div style={{
+              width: 40, height: 40, borderRadius: '50%',
+              background: 'rgba(255,255,255,0.95)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.4)',
+            }}>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="#1a0a2e">
+                <path d="M3 2l9 5-9 5V2z"/>
+              </svg>
+            </div>
+          </div>
         )}
 
         {/* Bottom gradient overlay */}
@@ -275,6 +433,7 @@ export default function HomePage() {
   const [plansLoading,   setPlansLoading]   = useState(true)
   const [loggedIn,       setLoggedIn]       = useState(false)
   const [showcaseVideos, setShowcaseVideos] = useState([])
+  const [activeVideo,    setActiveVideo]    = useState(null)
 
   useEffect(() => {
     billingApi.config()
@@ -301,6 +460,8 @@ export default function HomePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Create viral faceless AI videos in minutes. No camera, no editor. Just your niche and one click." />
       </Head>
+
+      <VideoModal item={activeVideo} onClose={() => setActiveVideo(null)} />
 
       <div style={{ background: 'var(--th-bg)', minHeight: '100vh' }}>
         <Navbar />
@@ -513,7 +674,7 @@ export default function HomePage() {
           {/* Desktop: all 6 in a row */}
           <div className="hidden lg:flex justify-center items-start gap-5 px-4">
             {displayShowcase.map((item, i) => (
-              <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} />
+              <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} onOpen={setActiveVideo} />
             ))}
           </div>
 
@@ -522,7 +683,7 @@ export default function HomePage() {
             style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
             {displayShowcase.map((item) => (
               <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
-                <PhoneCard item={item} rotate={0} />
+                <PhoneCard item={item} rotate={0} onOpen={setActiveVideo} />
               </div>
             ))}
           </div>
