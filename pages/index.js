@@ -519,7 +519,7 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <p className="text-center text-xs mt-6 px-4" style={{ color: 'var(--th-text-4)' }}>
+            <p className="text-center text-xs font-bold mt-6 px-4" style={{ color: 'var(--th-text-4)' }}>
               Click any video to watch it · Generated fresh every time
             </p>
           </div>
