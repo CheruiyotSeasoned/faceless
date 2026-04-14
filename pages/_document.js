@@ -11,6 +11,9 @@ export default function Document() {
       <body>
         <Main />
         <NextScript />
+        {/* TEMP: Eruda mobile debugger — REMOVE BEFORE GOING LIVE */}
+        <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+        <script dangerouslySetInnerHTML={{ __html: 'eruda.init()' }} />
       </body>
     </Html>
   )
