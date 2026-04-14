@@ -22,12 +22,12 @@ const GUIDES = [
 export default function GuidesPage() {
   return (
     <>
-      <Head><title>Guides — CliptoKai</title></Head>
+      <Head><title>Guides — ClipTok AI</title></Head>
       <AppShell breadcrumb={[{ label: 'Guides' }]}>
         <div className="p-7 max-w-2xl">
           <div className="mb-7">
             <h1 className="text-lg font-bold" style={{ color: 'var(--th-text-1)' }}>Guides</h1>
-            <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-4)' }}>Learn how to get the most out of CliptoKai.</p>
+            <p className="text-sm mt-0.5" style={{ color: 'var(--th-text-4)' }}>Learn how to get the most out of ClipTok AI.</p>
           </div>
 
           <div className="space-y-7">

@@ -273,7 +273,7 @@ export default function HomePage() {
   return (
     <>
       <Head>
-        <title>Faceless — AI Video Generator</title>
+        <title>ClipTok AI — AI Video Generator</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content="Create viral faceless AI videos in minutes. No camera, no editor. Just your niche and one click." />
       </Head>
@@ -719,13 +719,16 @@ export default function HomePage() {
         <footer className="py-10 px-4" style={{ borderTop: '1px solid var(--th-border)' }}>
           <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: 'var(--th-accent)' }}>
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center"
+                style={{ background: 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 100%)', boxShadow: '0 2px 8px rgba(139,92,246,0.35)' }}>
                 <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
-                  <path d="M8 1L14.5 5V11L8 15L1.5 11V5L8 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-                  <circle cx="8" cy="8" r="2.5" fill="white"/>
+                  <path d="M5 3.5L13.5 8L5 12.5Z" fill="white"/>
+                  <path d="M13 1.5L13.4 2.6L14.5 3L13.4 3.4L13 4.5L12.6 3.4L11.5 3L12.6 2.6Z" fill="rgba(255,255,255,0.85)"/>
                 </svg>
               </div>
-              <span className="font-bold" style={{ color: 'var(--th-text-2)' }}>CliptoKai</span>
+              <span className="font-black tracking-tight">
+                <span style={{ color: 'var(--th-text-2)' }}>ClipTok</span><span style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}> AI</span>
+              </span>
               <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2025</span>
             </div>
             <div className="flex gap-6">

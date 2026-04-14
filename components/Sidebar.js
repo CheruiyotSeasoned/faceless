@@ -37,14 +37,17 @@ export default function Sidebar({ user }) {
   return (
     <aside className="hidden lg:flex flex-col w-56 h-screen fixed left-0 top-0 bg-[#0a0a14] border-r border-white/5 z-40">
       {/* Logo */}
-      <Link href="/dashboard" className="flex items-center gap-2 px-5 py-5 border-b border-white/5">
-        <div className="w-7 h-7 rounded-md bg-gradient-to-br from-brand-500 to-purple-400 flex items-center justify-center flex-shrink-0">
+      <Link href="/dashboard" className="flex items-center gap-2.5 px-5 py-5 border-b border-white/5">
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
+          style={{ background: 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 100%)', boxShadow: '0 2px 8px rgba(139,92,246,0.5)' }}>
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1L14.5 5V11L8 15L1.5 11V5L8 1Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
-            <circle cx="8" cy="8" r="2.5" fill="white"/>
+            <path d="M5 3.5L13.5 8L5 12.5Z" fill="white"/>
+            <path d="M13 1.5L13.4 2.6L14.5 3L13.4 3.4L13 4.5L12.6 3.4L11.5 3L12.6 2.6Z" fill="rgba(255,255,255,0.85)"/>
           </svg>
         </div>
-        <span className="font-bold text-white tracking-tight">CliptoKai</span>
+        <span className="font-black tracking-tight text-base">
+          <span style={{ color: 'white' }}>ClipTok</span><span style={{ background: 'linear-gradient(135deg, #c4b5fd, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}> AI</span>
+        </span>
       </Link>
 
       {/* Nav */}

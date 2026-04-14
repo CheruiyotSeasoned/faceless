@@ -60,14 +60,16 @@ export default function AdminShell({ children, breadcrumb = [] }) {
       <div className="flex items-center gap-2.5 px-4 py-5 flex-shrink-0"
         style={{ borderBottom: '1px solid var(--th-border-soft)' }}>
         <div className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0"
-          style={{ background: '#ef4444' }}>
+          style={{ background: 'linear-gradient(135deg, #5b21b6 0%, #8b5cf6 100%)', boxShadow: '0 2px 8px rgba(139,92,246,0.4)' }}>
           <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-            <path d="M8 1L14.5 5V11L8 15L1.5 11V5L8 1Z" stroke="white" strokeWidth="1.8" strokeLinejoin="round"/>
-            <circle cx="8" cy="8" r="2.5" fill="white"/>
+            <path d="M5 3.5L13.5 8L5 12.5Z" fill="white"/>
+            <path d="M13 1.5L13.4 2.6L14.5 3L13.4 3.4L13 4.5L12.6 3.4L11.5 3L12.6 2.6Z" fill="rgba(255,255,255,0.85)"/>
           </svg>
         </div>
         <div className="leading-tight">
-          <div className="text-sm font-bold" style={{ color: 'var(--th-text-1)' }}>CliptoKai</div>
+          <div className="font-black text-sm tracking-tight">
+            <span style={{ color: 'var(--th-text-1)' }}>ClipTok</span><span style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}> AI</span>
+          </div>
           <div className="text-xs font-semibold" style={{ color: '#ef4444' }}>Admin</div>
         </div>
       </div>

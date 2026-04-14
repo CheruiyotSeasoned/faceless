@@ -62,7 +62,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <Head><title>Settings — CliptoKai</title></Head>
+      <Head><title>Settings — ClipTok AI</title></Head>
       <AppShell breadcrumb={[{ label: 'Settings' }]}>
         <div className="p-7 max-w-xl space-y-4">
           <div className="mb-2">

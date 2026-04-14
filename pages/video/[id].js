@@ -72,7 +72,7 @@ export default function VideoPage() {
 
   return (
     <>
-      <Head><title>{video?.title || video?.topic || 'Video'} — CliptoKai</title></Head>
+      <Head><title>{video?.title || video?.topic || 'Video'} — ClipTok AI</title></Head>
       <AppShell breadcrumb={[
         { label: 'Videos', href: '/videos' },
         { label: video?.title || video?.topic || `#${id}` },

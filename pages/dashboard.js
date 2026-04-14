@@ -296,7 +296,7 @@ export default function DashboardPage() {
 
   return (
     <>
-      <Head><title>Series — CliptoKai</title></Head>
+      <Head><title>Series — ClipTok AI</title></Head>
       <AppShell breadcrumb={[{ label: 'Series' }]}>
         <div className="p-7">
           {/* Header */}

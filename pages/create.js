@@ -135,7 +135,7 @@ export default function CreatePage() {
 
   return (
     <>
-      <Head><title>Create Video — CliptoKai</title></Head>
+      <Head><title>Create Video — ClipTok AI</title></Head>
       <AppShell breadcrumb={[{ label: 'Series', href: '/dashboard' }, { label: 'Create Video' }]}>
         <div className="p-7 max-w-2xl">
 
