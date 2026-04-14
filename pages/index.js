@@ -590,6 +590,51 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════
+            VIDEO SHOWCASE  — moved up: first thing after hero
+        ═══════════════════════════════════════════════════════ */}
+        <section id="showcase" className="py-20 overflow-hidden"
+          style={{ background: 'var(--th-surface)', borderTop: '1px solid var(--th-border)', borderBottom: '1px solid var(--th-border)' }}>
+          <div className="text-center mb-12 px-4">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4 text-sm font-semibold"
+              style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
+              Real output examples
+            </div>
+            <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: 'var(--th-text-1)' }}>
+              This is what you'll create
+            </h2>
+            <p className="text-lg max-w-xl mx-auto" style={{ color: 'var(--th-text-3)' }}>
+              Fully AI-produced vertical videos — script, voice, visuals, captions — across every top-performing niche.
+            </p>
+          </div>
+
+          {/* Desktop: all 6 in a row */}
+          <div className="hidden lg:flex justify-center items-start gap-5 px-4">
+            {displayShowcase.map((item, i) => (
+              <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} onOpen={setActiveVideo} />
+            ))}
+          </div>
+
+          {/* Mobile / tablet: horizontal scroll */}
+          <div className="lg:hidden flex gap-5 px-6 overflow-x-auto pb-4"
+            style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
+            {displayShowcase.map((item) => (
+              <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
+                <PhoneCard item={item} rotate={0} onOpen={setActiveVideo} />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12 px-4">
+            <p className="text-sm mb-5" style={{ color: 'var(--th-text-4)' }}>
+              Every video is generated fresh — unique script, unique visuals, unique voice.
+            </p>
+            <Link href={loggedIn ? '/create' : '/login'} className="btn-primary text-sm px-7 py-3">
+              Generate your first video free
+            </Link>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════
             STATS BAR
         ═══════════════════════════════════════════════════════ */}
         <section className="py-12 px-4" style={{ borderTop: '1px solid var(--th-border)', borderBottom: '1px solid var(--th-border)' }}>
@@ -651,51 +696,6 @@ export default function HomePage() {
           <div className="text-center mt-10">
             <Link href={loggedIn ? '/create' : '/login'} className="btn-primary text-sm px-7 py-3">
               Start for free — no credit card
-            </Link>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════
-            VIDEO SHOWCASE
-        ═══════════════════════════════════════════════════════ */}
-        <section id="showcase" className="py-24 overflow-hidden"
-          style={{ background: 'var(--th-surface)', borderTop: '1px solid var(--th-border)', borderBottom: '1px solid var(--th-border)' }}>
-          <div className="text-center mb-16 px-4">
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4 text-sm font-semibold"
-              style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
-              Real output examples
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: 'var(--th-text-1)' }}>
-              This is what you'll create
-            </h2>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: 'var(--th-text-3)' }}>
-              Fully AI-produced vertical videos — script, voice, visuals, captions — across every top-performing niche.
-            </p>
-          </div>
-
-          {/* Desktop: all 6 in a row */}
-          <div className="hidden lg:flex justify-center items-start gap-5 px-4">
-            {displayShowcase.map((item, i) => (
-              <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} onOpen={setActiveVideo} />
-            ))}
-          </div>
-
-          {/* Mobile / tablet: horizontal scroll */}
-          <div className="lg:hidden flex gap-5 px-6 overflow-x-auto pb-4"
-            style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
-            {displayShowcase.map((item) => (
-              <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
-                <PhoneCard item={item} rotate={0} onOpen={setActiveVideo} />
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-14 px-4">
-            <p className="text-sm mb-5" style={{ color: 'var(--th-text-4)' }}>
-              Every video is generated fresh — unique script, unique visuals, unique voice.
-            </p>
-            <Link href={loggedIn ? '/create' : '/login'} className="btn-primary text-sm px-7 py-3">
-              Generate your first video free
             </Link>
           </div>
         </section>
