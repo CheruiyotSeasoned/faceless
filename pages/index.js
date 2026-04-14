@@ -469,23 +469,22 @@ export default function HomePage() {
         <Navbar />
 
         {/* ═══════════════════════════════════════════════════════
-            HERO
+            HERO  +  INLINE VIDEO SHOWCASE
         ═══════════════════════════════════════════════════════ */}
-        <section className="relative flex items-center justify-center overflow-hidden pt-16">
+        <section id="showcase" className="relative overflow-hidden pt-16">
           {/* Accent orbs */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            <div className="absolute w-[700px] h-[700px] rounded-full top-[-20%] right-[-15%] opacity-[0.18]"
+            <div className="absolute w-[700px] h-[700px] rounded-full top-[-20%] right-[-15%] opacity-[0.15]"
               style={{ background: 'radial-gradient(circle, var(--th-accent-md) 0%, transparent 70%)' }} />
-            <div className="absolute w-[450px] h-[450px] rounded-full bottom-[-10%] left-[-10%] opacity-[0.12]"
+            <div className="absolute w-[450px] h-[450px] rounded-full bottom-[-10%] left-[-10%] opacity-[0.1]"
               style={{ background: 'radial-gradient(circle, var(--th-accent-md) 0%, transparent 70%)' }} />
-            {/* Grid dots */}
-            <div className="absolute inset-0 opacity-[0.025]"
+            <div className="absolute inset-0 opacity-[0.02]"
               style={{ backgroundImage: 'radial-gradient(circle, var(--th-accent) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
           </div>
 
-          <div className="relative z-10 max-w-5xl mx-auto px-4 text-center py-28">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-8 text-sm font-semibold"
+          {/* Headline + CTA */}
+          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center pt-20 pb-12">
+            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-7 text-sm font-semibold"
               style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--th-accent)' }} />
               No camera. No editor. Just results.
@@ -497,140 +496,44 @@ export default function HomePage() {
               <span style={{ color: 'var(--th-accent)' }}>showing your face</span>
             </h1>
 
-            <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-10 leading-relaxed"
+            <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-8 leading-relaxed"
               style={{ color: 'var(--th-text-3)' }}>
               Pick a niche. Click generate. Get a fully produced AI video — script, voice, visuals, captions and music — ready to post in under 3 minutes.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
-                href={loggedIn ? '/create' : '/login'}
-                className="btn-primary text-base px-8 py-4 flex items-center gap-2">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-                Create your first video free
-              </Link>
-              <Link href="#showcase" className="btn-secondary text-base px-8 py-4">
-                See example videos
-              </Link>
-            </div>
-
-            <p className="text-sm mt-5" style={{ color: 'var(--th-text-4)' }}>
-              No credit card required · 3 free videos · Cancel anytime
-            </p>
-
-            {/* ── Dashboard mockup ── */}
-            <div className="mt-20 relative max-w-4xl mx-auto">
-              <div className="rounded-3xl p-1 shadow-2xl"
-                style={{ background: 'var(--th-surface)', border: '1px solid var(--th-border)' }}>
-                <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--th-surface-2)' }}>
-                  {/* Browser bar */}
-                  <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: '1px solid var(--th-border)' }}>
-                    <div className="w-3 h-3 rounded-full" style={{ background: '#f87171' }} />
-                    <div className="w-3 h-3 rounded-full" style={{ background: '#fbbf24' }} />
-                    <div className="w-3 h-3 rounded-full" style={{ background: '#4ade80' }} />
-                    <div className="flex-1 rounded-md h-5 mx-4" style={{ background: 'var(--th-border)' }} />
-                  </div>
-                  {/* Stat cards */}
-                  <div className="p-5 grid grid-cols-3 gap-4">
-                    {[
-                      { label: 'Credits remaining', value: '57',  sub: '+3 this week' },
-                      { label: 'Videos created',    value: '142', sub: 'all time' },
-                      { label: 'Ready to download', value: '138', sub: 'this month' },
-                    ].map(s => (
-                      <div key={s.label} className="card p-4">
-                        <div className="text-2xl font-black" style={{ color: 'var(--th-accent)' }}>{s.value}</div>
-                        <div className="text-xs font-medium mt-0.5" style={{ color: 'var(--th-text-2)' }}>{s.label}</div>
-                        <div className="text-xs mt-0.5" style={{ color: 'var(--th-text-4)' }}>{s.sub}</div>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Video grid */}
-                  <div className="px-5 pb-5 grid grid-cols-4 gap-3">
-                    {[
-                      { niche: 'Motivation', status: 'ready',      dot: '#22c55e' },
-                      { niche: 'Did You Know', status: 'ready',    dot: '#22c55e' },
-                      { niche: 'Scary Story', status: 'generating', dot: 'var(--th-accent)' },
-                      { niche: 'History',     status: 'queued',    dot: 'var(--th-border)' },
-                    ].map(v => (
-                      <div key={v.niche} className="card overflow-hidden">
-                        <div className="h-16 flex items-center justify-center"
-                          style={{ background: 'var(--th-accent-lt)' }}>
-                          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <rect x="2" y="3" width="11" height="14" rx="2" stroke="var(--th-accent)" strokeWidth="1.3"/>
-                            <path d="M13 7l4-2.5v8l-4-2.5" stroke="var(--th-accent)" strokeWidth="1.3" strokeLinejoin="round"/>
-                          </svg>
-                        </div>
-                        <div className="p-2">
-                          <div className="text-xs font-semibold truncate" style={{ color: 'var(--th-text-2)' }}>{v.niche}</div>
-                          <div className="flex items-center gap-1 mt-0.5">
-                            <div className="w-1.5 h-1.5 rounded-full" style={{ background: v.dot }} />
-                            <span className="text-xs" style={{ color: 'var(--th-text-4)' }}>{v.status}</span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              {/* Floating badge */}
-              <div className="absolute -top-4 -left-4 rounded-2xl px-4 py-2.5 hidden sm:block"
-                style={{ background: 'var(--th-surface)', border: '1px solid var(--th-border)', boxShadow: '0 4px 24px rgba(108,71,255,0.15)' }}>
-                <div className="text-sm font-bold" style={{ color: '#22c55e' }}>✓ Video ready!</div>
-                <div className="text-xs" style={{ color: 'var(--th-text-4)' }}>Your TikTok is live</div>
-              </div>
-              <div className="absolute -bottom-4 -right-4 rounded-2xl px-4 py-2.5 hidden sm:block"
-                style={{ background: 'var(--th-surface)', border: '1px solid var(--th-border)', boxShadow: '0 4px 24px rgba(108,71,255,0.15)' }}>
-                <div className="text-sm font-bold" style={{ color: 'var(--th-accent)' }}>⚡ 2 min 14 sec</div>
-                <div className="text-xs" style={{ color: 'var(--th-text-4)' }}>Generation time</div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ═══════════════════════════════════════════════════════
-            VIDEO SHOWCASE  — moved up: first thing after hero
-        ═══════════════════════════════════════════════════════ */}
-        <section id="showcase" className="py-20 overflow-hidden"
-          style={{ background: 'var(--th-surface)', borderTop: '1px solid var(--th-border)', borderBottom: '1px solid var(--th-border)' }}>
-          <div className="text-center mb-12 px-4">
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-4 text-sm font-semibold"
-              style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
-              Real output examples
-            </div>
-            <h2 className="text-4xl sm:text-5xl font-black mb-4" style={{ color: 'var(--th-text-1)' }}>
-              This is what you'll create
-            </h2>
-            <p className="text-lg max-w-xl mx-auto" style={{ color: 'var(--th-text-3)' }}>
-              Fully AI-produced vertical videos — script, voice, visuals, captions — across every top-performing niche.
-            </p>
-          </div>
-
-          {/* Desktop: all 6 in a row */}
-          <div className="hidden lg:flex justify-center items-start gap-5 px-4">
-            {displayShowcase.map((item, i) => (
-              <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} onOpen={setActiveVideo} />
-            ))}
-          </div>
-
-          {/* Mobile / tablet: horizontal scroll */}
-          <div className="lg:hidden flex gap-5 px-6 overflow-x-auto pb-4"
-            style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
-            {displayShowcase.map((item) => (
-              <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
-                <PhoneCard item={item} rotate={0} onOpen={setActiveVideo} />
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-12 px-4">
-            <p className="text-sm mb-5" style={{ color: 'var(--th-text-4)' }}>
-              Every video is generated fresh — unique script, unique visuals, unique voice.
-            </p>
-            <Link href={loggedIn ? '/create' : '/login'} className="btn-primary text-sm px-7 py-3">
-              Generate your first video free
+            <Link href={loggedIn ? '/create' : '/login'}
+              className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Create your first video free
             </Link>
+
+            <p className="text-sm mt-4" style={{ color: 'var(--th-text-4)' }}>
+              No credit card required · Cancel anytime
+            </p>
+          </div>
+
+          {/* Phone cards — inline in hero */}
+          <div className="relative z-10 pb-16">
+            {/* Desktop */}
+            <div className="hidden lg:flex justify-center items-start gap-5 px-4">
+              {displayShowcase.map((item, i) => (
+                <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} onOpen={setActiveVideo} />
+              ))}
+            </div>
+            {/* Mobile / tablet scroll */}
+            <div className="lg:hidden flex gap-5 px-6 overflow-x-auto pb-2"
+              style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
+              {displayShowcase.map((item) => (
+                <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
+                  <PhoneCard item={item} rotate={0} onOpen={setActiveVideo} />
+                </div>
+              ))}
+            </div>
+            <p className="text-center text-xs mt-6 px-4" style={{ color: 'var(--th-text-4)' }}>
+              Click any video to watch it · Generated fresh every time
+            </p>
           </div>
         </section>
 
