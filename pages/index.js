@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Navbar from '../components/Navbar'
+import ChatBot from '../components/ChatBot'
 import { billing as billingApi, auth, videos as videosApi } from '../lib/api'
 
 const CURRENCY_SYMBOLS = { USD: '$', KES: 'KES ', GBP: '£', EUR: '€', NGN: '₦', GHS: 'GH₵', ZAR: 'R' }
@@ -462,6 +463,7 @@ export default function HomePage() {
       </Head>
 
       <VideoModal item={activeVideo} onClose={() => setActiveVideo(null)} />
+      <ChatBot />
 
       <div style={{ background: 'var(--th-bg)', minHeight: '100vh' }}>
         <Navbar />
@@ -917,8 +919,8 @@ export default function HomePage() {
               <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2025</span>
             </div>
             <div className="flex gap-6">
-              {['Terms', 'Privacy', 'Support'].map(l => (
-                <a key={l} href="#" className="text-sm transition-colors hover:underline" style={{ color: 'var(--th-text-4)' }}>{l}</a>
+              {[['Terms', '/terms'], ['Privacy', '/privacy'], ['Support', '/support']].map(([label, href]) => (
+                <Link key={label} href={href} className="text-sm hover:underline" style={{ color: 'var(--th-text-4)' }}>{label}</Link>
               ))}
             </div>
           </div>

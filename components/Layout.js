@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import Navbar from './Navbar'
+import ChatBot from './ChatBot'
 
 export default function Layout({ children, title = 'ClipTok AI', hideNav = false, minimal = false }) {
   return (
@@ -16,6 +17,8 @@ export default function Layout({ children, title = 'ClipTok AI', hideNav = false
       <main className={hideNav ? '' : minimal ? 'pt-16' : 'pt-16'}>
         {children}
       </main>
+
+      <ChatBot />
     </>
   )
 }
