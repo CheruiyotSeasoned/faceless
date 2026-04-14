@@ -484,21 +484,21 @@ export default function HomePage() {
 
           {/* Headline */}
           <div className="relative z-10 max-w-4xl mx-auto px-4 text-center pt-20 pb-8">
-            <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-7 text-sm font-semibold"
+            {/* <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-7 text-sm font-semibold"
               style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--th-accent)' }} />
               No camera. No editor. Just results.
-            </div>
+            </div> */}
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-6 leading-[1.05]"
               style={{ color: 'var(--th-text-1)' }}>
-              Go viral without{' '}
-              <span style={{ color: 'var(--th-accent)' }}>showing your face</span>
+              Create Instant{' '}
+              <span style={{ color: 'var(--th-accent)' }}> AI Reels</span>
             </h1>
 
             <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed"
               style={{ color: 'var(--th-text-3)' }}>
-              Pick a niche. Click generate. Get a fully produced AI video — script, voice, visuals, captions and music — ready to post in under 3 minutes.
+              Pick a niche. Click generate and post in under 3 minutes.
             </p>
           </div>
 
