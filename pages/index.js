@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Navbar from '../components/Navbar'
-import { billing as billingApi, auth } from '../lib/api'
+import { billing as billingApi, auth, videos as videosApi } from '../lib/api'
 
 const CURRENCY_SYMBOLS = { USD: '$', KES: 'KES ', GBP: '£', EUR: '€', NGN: '₦', GHS: 'GH₵', ZAR: 'R' }
 
@@ -142,6 +142,14 @@ function PhoneCard({ item, rotate }) {
           </div>
         </div>
 
+        {/* Background: real video or gradient */}
+        {item.video_url ? (
+          <video src={item.video_url} autoPlay muted loop playsInline
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }} />
+        ) : (
+          <div style={{ position: 'absolute', inset: 0, background: item.bg, zIndex: 0 }} />
+        )}
+
         {/* Bottom gradient overlay */}
         <div style={{
           position: 'absolute', inset: 0, zIndex: 1,
@@ -161,14 +169,16 @@ function PhoneCard({ item, rotate }) {
           </span>
         </div>
 
-        {/* Center emoji */}
-        <div style={{
-          position: 'absolute', top: '38%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          zIndex: 2, fontSize: 38, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))',
-        }}>
-          {item.emoji}
-        </div>
+        {/* Center emoji — hidden when real video is playing */}
+        {!item.video_url && (
+          <div style={{
+            position: 'absolute', top: '38%', left: '50%',
+            transform: 'translate(-50%, -50%)',
+            zIndex: 2, fontSize: 38, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.6))',
+          }}>
+            {item.emoji}
+          </div>
+        )}
 
         {/* Caption text */}
         <div style={{ position: 'absolute', bottom: 68, left: 0, right: 22, padding: '0 11px', zIndex: 4 }}>
@@ -254,10 +264,11 @@ function PhoneCard({ item, rotate }) {
 }
 
 export default function HomePage() {
-  const [plans,        setPlans]        = useState([])
-  const [currency,     setCurrency]     = useState('USD')
-  const [plansLoading, setPlansLoading] = useState(true)
-  const [loggedIn,     setLoggedIn]     = useState(false)
+  const [plans,          setPlans]          = useState([])
+  const [currency,       setCurrency]       = useState('USD')
+  const [plansLoading,   setPlansLoading]   = useState(true)
+  const [loggedIn,       setLoggedIn]       = useState(false)
+  const [showcaseVideos, setShowcaseVideos] = useState([])
 
   useEffect(() => {
     billingApi.config()
@@ -265,7 +276,14 @@ export default function HomePage() {
       .catch(() => {})
       .finally(() => setPlansLoading(false))
     auth.me().then(() => setLoggedIn(true)).catch(() => {})
+    videosApi.showcase().then(d => setShowcaseVideos(d.videos || [])).catch(() => {})
   }, [])
+
+  const displayShowcase = SHOWCASE.map((item, i) => ({
+    ...item,
+    video_url: showcaseVideos[i]?.video_url || null,
+    niche:     showcaseVideos[i]?.topic     || item.niche,
+  }))
 
   const sym      = CURRENCY_SYMBOLS[currency] || (currency + ' ')
   const fmtPrice = (price) => price === 0 ? 'Free' : `${sym}${price.toLocaleString()}`
@@ -488,7 +506,7 @@ export default function HomePage() {
 
           {/* Desktop: all 6 in a row */}
           <div className="hidden lg:flex justify-center items-start gap-5 px-4">
-            {SHOWCASE.map((item, i) => (
+            {displayShowcase.map((item, i) => (
               <PhoneCard key={item.niche} item={item} rotate={ROTATIONS[i]} />
             ))}
           </div>
@@ -496,7 +514,7 @@ export default function HomePage() {
           {/* Mobile / tablet: horizontal scroll */}
           <div className="lg:hidden flex gap-5 px-6 overflow-x-auto pb-4"
             style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
-            {SHOWCASE.map((item) => (
+            {displayShowcase.map((item) => (
               <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
                 <PhoneCard item={item} rotate={0} />
               </div>
