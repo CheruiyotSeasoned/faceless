@@ -103,6 +103,7 @@ const SHOWCASE = [
     views: '1.2M', likes: '118K', comments: '5.6K',
     username: '@historyvault', desc: 'History untold',
     avatar: 'HV', avatarBg: '#92400e', progress: 55,
+    video_url: 'https://dfsncplzrz5f2.cloudfront.net/renders/wihb5rdzhv/out.mp4?Expires=1776729600&Signature=UTef3UWEr6H8tEPyxse99n9zG~abbs01lxwsjAJzopvQcHKa88HoK1VzKyp6Gjoo~wFTWuy4xahCWG0~2Tfnyx9V7yz~A9JBoUO6SjakWGiYIFb~RFpHhRS9Q09pr7jB55c2mm7UWsLq8lTj-OTEpwxFn4W7ofCJ6tX12Bqeyr~n38hAU0tCKwaOWlRkQnA0GmfdG0DljyOSabzf5MZ1jDtQ1Y8db5QmWtkp0PmMUrS0j~bgdLv9RHC4RAb~IpTuqTt7UhfTzCkEPQCJoJt80movIy5pAb~AHaZrDtdsnKczlmRQszy3pU9hhkTBK3jq5JhUL7W3awsP2efRE~CEoA__&Key-Pair-Id=K2G9P08V12PAM1',
   },
   {
     niche: 'Finance', emoji: '💰',
@@ -111,6 +112,7 @@ const SHOWCASE = [
     views: '4.7M', likes: '521K', comments: '12K',
     username: '@wealthcode', desc: 'Financial freedom',
     avatar: 'WC', avatarBg: '#166534', progress: 88,
+    video_url: 'https://dfsncplzrz5f2.cloudfront.net/renders/ffgtvvl5kl/out.mp4?Expires=1776729600&Signature=J8KOmVSqB7f6CqH5olVd0~DaShE4Dp9oFg301omM~5FfXW~1h96CJLze2VqTih~AkbQnGnMSdm~j-6lr0TJ4MU2GwaUu5Gw7EyEI~qV0HlbtDFc9pef-jA-TlEoQ9cOGQYENY1xjLoNz-UCDUxv5crpeoKL-MUJovUNYwXBAdrd5ZuZ8nqpv2RBGrhMuzNHeOXWMwcYmnK1m4LyflQuJ3lGXVOR6uCQJKvy7jaCF6czguz3wFwddkya4LwsJFMlDWMH8a5uC68BBjxGivEKVJx4T9xABu-qzqTDpxM5KFvVjvLPOmOgEjPee2nLq~Q0ih9ijXkG6OrdqblLHAOrVig__&Key-Pair-Id=K2G9P08V12PAM1',
   },
 ]
 
