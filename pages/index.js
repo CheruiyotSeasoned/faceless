@@ -67,6 +67,7 @@ const SHOWCASE = [
     views: '2.4M', likes: '284K', comments: '1.2K',
     username: '@mindsetshift', desc: 'Daily motivation',
     avatar: 'MS', avatarBg: '#c94a00', progress: 62,
+    video_url: 'https://dfsncplzrz5f2.cloudfront.net/renders/6iy1aek66u/out.mp4?Expires=1776729600&Signature=PqglecaDDeO2eGLjEYMYJ5D-BKEq01PDtYKlWVoti6xfOyQ501tkE0gQTOrB-ezOtKnhm6v5Q7~Q6R8Zrg~HGN9tSr3zMy7Sy1fJVgH07yUFGlGWBUock6RRHmx4ZkozwLYPpwoileBA0Q93Ko9WIx1WIjEX6OL7Mli2pN3OT6ZUDW39JTDCH5BlLOhztJ~Anj5ptCBchPIt9HPehWqopcALja8zqh1tNUsLkYnkDK5sLUxAm79tKXZ8AV1uIJNN3Iac23xMqBt2j2PV2-BJzgLtY8zrzq7EVMbD0bH~UbFDoxlfbDLpGJsXG7Pp3vpY1bMpIDpAmWyvhT3ZaLT1iw__&Key-Pair-Id=K2G9P08V12PAM1',
   },
   {
     niche: 'Did You Know', emoji: '🧠',
@@ -75,6 +76,7 @@ const SHOWCASE = [
     views: '1.8M', likes: '142K', comments: '3.4K',
     username: '@brainfiles', desc: 'Mind-blowing facts',
     avatar: 'BF', avatarBg: '#1d4ed8', progress: 45,
+    video_url: 'https://dfsncplzrz5f2.cloudfront.net/renders/x160hc4jve/out.mp4?Expires=1776729600&Signature=LsdCzwo3OgzI54nZsagX2oezKWwb5Tt62fV4zbFepNHoDMaCqc2sdVcK7ZYxcLB95-n2yCUwLtTnXfTkxrf8oisCuiFb3AknDCtfokMIxtan12dJNSTJxEd2u5VHldIH1ir0lR534KX7uwkVuycvBoSAWEz0SIxZTHRRCteJDT8cyU6xLRkcyPrM5yOj9~9SqAGwSwER9cj6K5AnwrOJ9Fd0Zzlo4ZWm4oAyEnijAhQOoTe19HXorr90UJ5ZtwqoxDz3JYlCpWxLRj5~ZY99YhNEfXe4noqpLhr7IKqjRO9gukY2waAz2RMQGTjAX2i7cEMlpbeknn8W0s~dLJYOiQ__&Key-Pair-Id=K2G9P08V12PAM1',
   },
   {
     niche: 'Scary Stories', emoji: '👻',
@@ -83,6 +85,7 @@ const SHOWCASE = [
     views: '3.1M', likes: '445K', comments: '8.9K',
     username: '@midnighthorror', desc: 'Terrifying tales',
     avatar: 'MH', avatarBg: '#6d28d9', progress: 78,
+    video_url: 'https://dfsncplzrz5f2.cloudfront.net/renders/9ehj3svp25/out.mp4?Expires=1776729600&Signature=gxWwQxxUwPE-Bz~UckV5ylmFRgbJh3-rkeb4W93U62v4wrxXC7V9O5jZ3xEaJMHQ1ddIKJZb1ZGfSZXRlfN59SPVAuqiq2BjK78E7BiPfz-FncXbnFO8CchLI0ZskYx-rQteF31eFd-hS-y4QaNl-gPAo0Rk3V4wMiGafglnWueMjPN25yt2imKlxUB-r9pojBUJx25zR3uA0Z09~SIkdm2eGSBlbPztcWBQ4uDwO11EDNNOVXnmgjFEVc6u2DpCgUPgQYl06Mv4uQTg-9ednpvE5rqFtncFxhwYMwO6gWy-~MpJ2MvVP3VvF8XolyIr2Fq4OCLyJTkc7ItTbqF6pQ__&Key-Pair-Id=K2G9P08V12PAM1',
   },
   {
     niche: 'True Crime', emoji: '🔍',
@@ -91,6 +94,7 @@ const SHOWCASE = [
     views: '890K', likes: '67K', comments: '2.1K',
     username: '@casefiles_ai', desc: 'Real crime cases',
     avatar: 'CF', avatarBg: '#991b1b', progress: 33,
+    video_url: 'https://dfsncplzrz5f2.cloudfront.net/renders/9dpbgexlp6/out.mp4?Expires=1776729600&Signature=ND3WBeKcAxtOhD-02s22Aiaa20rLfwp8l3ZV-~IB0F7Tc3XfOA~5CN3A95jjzbSoDByhaqkczURyFHyoI8hdAtpKt8157U9XTIQ~DzPznGFy2WvpH1lGWT1XKffkX8Z~Jl3WtsQx1DoPfEMFyobQ2-cAuvxdQ~pHB~~UWx2iXeilms0iP2lX~oKK7I6FDnAbCbtZ026Yw6f0uj3ZzDIOijjlZ1JTnCcau5Cv12u8NGICqr4Ge5ypFlFBxpopZzDiP-BxyVXoiueyfwHCNbOrbgGLuYRTuH9nH~PLDVCf-PSY6mJTUPfuDkw8NmjZsK1K2aL-s6ZewfunHJgub1GqbQ__&Key-Pair-Id=K2G9P08V12PAM1',
   },
   {
     niche: 'History', emoji: '⚔️',
@@ -281,7 +285,7 @@ export default function HomePage() {
 
   const displayShowcase = SHOWCASE.map((item, i) => ({
     ...item,
-    video_url: showcaseVideos[i]?.video_url || null,
+    video_url: showcaseVideos[i]?.video_url || item.video_url || null,
     niche:     showcaseVideos[i]?.topic     || item.niche,
   }))
 
