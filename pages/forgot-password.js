@@ -25,7 +25,7 @@ export default function ForgotPasswordPage() {
 
   return (
     <>
-      <Head><title>Reset password — Faceless Reels</title></Head>
+      <Head><title>Reset password — CliptoKai</title></Head>
 
       <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10"
         style={{ background: 'var(--th-bg)' }}>
@@ -38,7 +38,7 @@ export default function ForgotPasswordPage() {
               <circle cx="8" cy="8" r="2.5" fill="white"/>
             </svg>
           </div>
-          <span className="font-bold text-lg" style={{ color: 'var(--th-text-1)' }}>Faceless Reels</span>
+          <span className="font-bold text-lg" style={{ color: 'var(--th-text-1)' }}>CliptoKai</span>
         </Link>
 
         <div className="w-full max-w-sm animate-slide-up">

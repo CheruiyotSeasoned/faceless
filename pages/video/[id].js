@@ -66,13 +66,13 @@ export default function VideoPage() {
     if (!video?.video_url) return
     const a = document.createElement('a')
     a.href = video.video_url
-    a.download = `faceless-${video.id}.mp4`
+    a.download = `cliptokai-${video.id}.mp4`
     a.click()
   }
 
   return (
     <>
-      <Head><title>{video?.title || video?.topic || 'Video'} — Faceless Reels</title></Head>
+      <Head><title>{video?.title || video?.topic || 'Video'} — CliptoKai</title></Head>
       <AppShell breadcrumb={[
         { label: 'Videos', href: '/videos' },
         { label: video?.title || video?.topic || `#${id}` },

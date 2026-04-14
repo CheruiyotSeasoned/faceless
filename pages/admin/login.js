@@ -33,7 +33,7 @@ export default function AdminLoginPage() {
 
   return (
     <>
-      <Head><title>Admin Login — Faceless Reels</title></Head>
+      <Head><title>Admin Login — CliptoKai</title></Head>
 
       <div className="min-h-screen flex items-center justify-center px-4" style={{ background: 'var(--th-bg)' }}>
         <div className="w-full max-w-sm">
@@ -47,7 +47,7 @@ export default function AdminLoginPage() {
               </svg>
             </div>
             <div className="leading-tight">
-              <div className="text-base font-bold" style={{ color: 'var(--th-text-1)' }}>Faceless Reels</div>
+              <div className="text-base font-bold" style={{ color: 'var(--th-text-1)' }}>CliptoKai</div>
               <div className="text-xs font-semibold" style={{ color: '#ef4444' }}>Admin Panel</div>
             </div>
           </div>

@@ -33,7 +33,7 @@ export default function VideosPage() {
 
   return (
     <>
-      <Head><title>Videos — Faceless Reels</title></Head>
+      <Head><title>Videos — CliptoKai</title></Head>
       <AppShell breadcrumb={[{ label: 'Videos' }]}>
         <div className="p-7">
           {/* Header */}

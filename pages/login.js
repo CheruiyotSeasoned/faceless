@@ -28,7 +28,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Head><title>Sign in — Faceless Reels</title></Head>
+      <Head><title>Sign in — CliptoKai</title></Head>
 
       <div className="min-h-screen flex" style={{ background: 'var(--th-bg)' }}>
 
@@ -48,7 +48,7 @@ export default function LoginPage() {
                 <circle cx="8" cy="8" r="2.5" fill="white"/>
               </svg>
             </div>
-            <span className="font-bold text-white text-lg">Faceless Reels</span>
+            <span className="font-bold text-white text-lg">CliptoKai</span>
           </div>
 
           {/* Quote */}
@@ -77,7 +77,7 @@ export default function LoginPage() {
                 <circle cx="8" cy="8" r="2.5" fill="white"/>
               </svg>
             </div>
-            <span className="font-bold text-lg" style={{ color: 'var(--th-text-1)' }}>Faceless Reels</span>
+            <span className="font-bold text-lg" style={{ color: 'var(--th-text-1)' }}>CliptoKai</span>
           </Link>
 
           <div className="w-full max-w-sm animate-slide-up">

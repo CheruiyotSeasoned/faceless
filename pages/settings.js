@@ -62,7 +62,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <Head><title>Settings — Faceless Reels</title></Head>
+      <Head><title>Settings — CliptoKai</title></Head>
       <AppShell breadcrumb={[{ label: 'Settings' }]}>
         <div className="p-7 max-w-xl space-y-4">
           <div className="mb-2">

@@ -86,8 +86,7 @@ function SidebarContent({ user, theme, router, onToggleTheme, onLogout, onNavCli
           </svg>
         </div>
         <div className="leading-tight">
-          <div className="text-sm font-bold" style={{ color: 'var(--th-text-1)' }}>Faceless</div>
-          <div className="text-xs font-medium" style={{ color: 'var(--th-text-3)' }}>Reels</div>
+          <div className="text-sm font-bold" style={{ color: 'var(--th-text-1)' }}>CliptoKai</div>
         </div>
       </Link>
 

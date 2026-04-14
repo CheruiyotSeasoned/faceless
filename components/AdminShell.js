@@ -67,7 +67,7 @@ export default function AdminShell({ children, breadcrumb = [] }) {
           </svg>
         </div>
         <div className="leading-tight">
-          <div className="text-sm font-bold" style={{ color: 'var(--th-text-1)' }}>Faceless</div>
+          <div className="text-sm font-bold" style={{ color: 'var(--th-text-1)' }}>CliptoKai</div>
           <div className="text-xs font-semibold" style={{ color: '#ef4444' }}>Admin</div>
         </div>
       </div>

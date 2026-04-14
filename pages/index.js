@@ -445,7 +445,7 @@ export default function HomePage() {
             <div className="hidden sm:block absolute top-10 left-[33%] right-[33%] h-px"
               style={{ background: 'linear-gradient(to right, var(--th-border), var(--th-accent-md), var(--th-border))', zIndex: 0 }} />
 
-            {STEPS.map((step, i) => (
+            {STEPS.map((step) => (
               <div key={step.num} className="card p-7 flex flex-col relative z-10"
                 style={{ background: 'var(--th-surface)' }}>
                 <div className="flex items-center gap-3 mb-5">
@@ -496,7 +496,7 @@ export default function HomePage() {
           {/* Mobile / tablet: horizontal scroll */}
           <div className="lg:hidden flex gap-5 px-6 overflow-x-auto pb-4"
             style={{ scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch' }}>
-            {SHOWCASE.map((item, i) => (
+            {SHOWCASE.map((item) => (
               <div key={item.niche} style={{ scrollSnapAlign: 'start', flexShrink: 0 }}>
                 <PhoneCard item={item} rotate={0} />
               </div>
@@ -725,7 +725,7 @@ export default function HomePage() {
                   <circle cx="8" cy="8" r="2.5" fill="white"/>
                 </svg>
               </div>
-              <span className="font-bold" style={{ color: 'var(--th-text-2)' }}>Faceless Reels</span>
+              <span className="font-bold" style={{ color: 'var(--th-text-2)' }}>CliptoKai</span>
               <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2025</span>
             </div>
             <div className="flex gap-6">

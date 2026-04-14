@@ -856,7 +856,7 @@ export default function OnboardingPage() {
 
   return (
     <>
-      <Head><title>Create New Series — Faceless Reels</title></Head>
+      <Head><title>Create New Series — CliptoKai</title></Head>
 
       <div className="min-h-screen" style={{ background: 'var(--th-bg)' }}>
         {/* Minimal top bar */}
@@ -868,7 +868,7 @@ export default function OnboardingPage() {
                 <circle cx="8" cy="8" r="2.5" fill="white"/>
               </svg>
             </div>
-            <span className="font-bold text-base" style={{ color: 'var(--th-text-1)' }}>Faceless Reels</span>
+            <span className="font-bold text-base" style={{ color: 'var(--th-text-1)' }}>CliptoKai</span>
           </Link>
           <Link href="/login" className="text-sm hover:underline" style={{ color: 'var(--th-text-4)' }}>
             Already have an account? Sign in

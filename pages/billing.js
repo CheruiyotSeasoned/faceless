@@ -134,7 +134,7 @@ export default function BillingPage() {
 
   if (loading) return (
     <>
-      <Head><title>Billing — Faceless Reels</title></Head>
+      <Head><title>Billing — CliptoKai</title></Head>
       <AppShell breadcrumb={[{ label: 'Billing' }]}>
         <div className="flex items-center justify-center py-20">
           <div className="w-8 h-8 rounded-full border-2 animate-spin"
@@ -146,7 +146,7 @@ export default function BillingPage() {
 
   return (
     <>
-      <Head><title>Billing — Faceless Reels</title></Head>
+      <Head><title>Billing — CliptoKai</title></Head>
 
       {checkoutUrl && (
         <CheckoutDialog

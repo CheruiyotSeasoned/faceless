@@ -44,7 +44,7 @@ export default function Sidebar({ user }) {
             <circle cx="8" cy="8" r="2.5" fill="white"/>
           </svg>
         </div>
-        <span className="font-bold text-white tracking-tight">Faceless</span>
+        <span className="font-bold text-white tracking-tight">CliptoKai</span>
       </Link>
 
       {/* Nav */}
