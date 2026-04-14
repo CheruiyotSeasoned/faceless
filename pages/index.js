@@ -482,8 +482,8 @@ export default function HomePage() {
               style={{ backgroundImage: 'radial-gradient(circle, var(--th-accent) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
           </div>
 
-          {/* Headline + CTA */}
-          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center pt-20 pb-12">
+          {/* Headline */}
+          <div className="relative z-10 max-w-4xl mx-auto px-4 text-center pt-20 pb-8">
             <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-7 text-sm font-semibold"
               style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
               <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--th-accent)' }} />
@@ -496,26 +496,14 @@ export default function HomePage() {
               <span style={{ color: 'var(--th-accent)' }}>showing your face</span>
             </h1>
 
-            <p className="text-lg sm:text-xl max-w-2xl mx-auto mb-8 leading-relaxed"
+            <p className="text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed"
               style={{ color: 'var(--th-text-3)' }}>
               Pick a niche. Click generate. Get a fully produced AI video — script, voice, visuals, captions and music — ready to post in under 3 minutes.
             </p>
-
-            <Link href={loggedIn ? '/create' : '/login'}
-              className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Create your first video free
-            </Link>
-
-            <p className="text-sm mt-4" style={{ color: 'var(--th-text-4)' }}>
-              No credit card required · Cancel anytime
-            </p>
           </div>
 
-          {/* Phone cards — inline in hero */}
-          <div className="relative z-10 pb-16">
+          {/* Phone cards — showcase */}
+          <div className="relative z-10 pb-8">
             {/* Desktop */}
             <div className="hidden lg:flex justify-center items-start gap-5 px-4">
               {displayShowcase.map((item, i) => (
@@ -533,6 +521,21 @@ export default function HomePage() {
             </div>
             <p className="text-center text-xs mt-6 px-4" style={{ color: 'var(--th-text-4)' }}>
               Click any video to watch it · Generated fresh every time
+            </p>
+          </div>
+
+          {/* CTA */}
+          <div className="relative z-10 text-center pb-16">
+            <Link href={loggedIn ? '/create' : '/login'}
+              className="btn-primary text-base px-8 py-4 inline-flex items-center gap-2">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M3 8l4 4 6-7" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Create your first video free
+            </Link>
+
+            <p className="text-sm mt-4" style={{ color: 'var(--th-text-4)' }}>
+              No credit card required · Cancel anytime
             </p>
           </div>
         </section>
