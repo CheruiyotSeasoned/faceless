@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [form, setForm]       = useState({ email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState('')
+  const [showPass, setShowPass] = useState(false)
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }))
 
@@ -112,8 +113,24 @@ export default function LoginPage() {
                   <label className="text-sm font-medium" style={{ color: 'var(--th-text-2)' }}>Password</label>
                   <Link href="/forgot-password" className="text-xs hover:underline" style={{ color: 'var(--th-accent)' }}>Forgot password?</Link>
                 </div>
-                <input type="password" className="input" placeholder="Your password"
-                  value={form.password} onChange={e => set('password', e.target.value)} required />
+                <div className="relative">
+                  <input type={showPass ? 'text' : 'password'} className="input pr-10" placeholder="Your password"
+                    value={form.password} onChange={e => set('password', e.target.value)} required />
+                  <button type="button" onClick={() => setShowPass(v => !v)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2"
+                    style={{ color: 'var(--th-text-4)' }}>
+                    {showPass ? (
+                      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M3 3l14 14M8.5 8.6A3 3 0 0011.4 11.5M6.3 6.3C4.6 7.4 3.2 8.9 2 10c1.9 2.5 4.7 5 8 5a8 8 0 003.7-.9M10 5c3.3 0 6.1 2.5 8 5a14 14 0 01-2.3 2.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
+                        <path d="M2 10c1.9-2.5 4.7-5 8-5s6.1 2.5 8 5c-1.9 2.5-4.7 5-8 5s-6.1-2.5-8-5z" stroke="currentColor" strokeWidth="1.5"/>
+                        <circle cx="10" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
+                      </svg>
+                    )}
+                  </button>
+                </div>
               </div>
 
               {error && (
