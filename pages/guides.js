@@ -129,7 +129,7 @@ function GuideModal({ guide, onClose }) {
       onClick={e => { if (e.target === e.currentTarget) onClose() }}>
 
       <div className="relative w-full sm:max-w-xl max-h-[90vh] sm:max-h-[80vh] flex flex-col rounded-t-2xl sm:rounded-2xl overflow-hidden"
-        style={{ background: 'var(--th-card)', border: '1px solid var(--th-border)' }}>
+        style={{ background: 'var(--th-surface)', border: '1px solid var(--th-border)' }}>
 
         {/* Header */}
         <div className="flex items-start justify-between px-6 pt-5 pb-4 flex-shrink-0"
