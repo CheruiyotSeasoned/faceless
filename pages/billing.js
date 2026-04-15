@@ -216,7 +216,7 @@ export default function BillingPage() {
                       )}
                     </div>
                     <div className="text-sm font-semibold mt-0.5" style={{ color: 'var(--th-accent)' }}>
-                      {plan.id === 'free' ? '3 total credits' : `${plan.credits} credits/month`}
+                      {plan.id === 'free' ? '1 video total' : `${plan.credits} credits/month`}
                     </div>
                   </div>
 

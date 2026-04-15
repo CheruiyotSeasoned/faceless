@@ -749,7 +749,7 @@ export default function HomePage() {
                         {plan.price > 0 && <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>/mo</span>}
                       </div>
                       <div className="text-sm font-bold mt-1" style={{ color: 'var(--th-accent)' }}>
-                        {plan.id === 'free' ? '3 total videos' : `${plan.credits / 50} videos/month`}
+                        {plan.id === 'free' ? '1 video total' : `${plan.credits / 50} videos/month`}
                       </div>
                     </div>
                     <ul className="space-y-2.5 flex-1 mb-6">
@@ -800,7 +800,7 @@ export default function HomePage() {
                 {loggedIn ? 'Create a video now' : 'Get started for free'}
               </Link>
               <p className="text-sm mt-4" style={{ color: 'var(--th-text-4)' }}>
-                No credit card · 3 free videos · Cancel anytime
+                No credit card · 1 free video · Cancel anytime
               </p>
             </div>
           </div>
