@@ -72,7 +72,7 @@ const DURATIONS = [
   { id: '120-180', label: '120–180 seconds'},
 ]
 
-const STEP_LABELS = ['Niche', 'Voice', 'Music', 'Art Style', 'Captions', 'Effects', 'Social', 'Details', 'Account']
+const STEP_LABELS = ['Niche', 'Voice', 'Music', 'Art Style', 'Captions', 'Effects', 'Details', 'Account']
 const TOTAL = STEP_LABELS.length
 
 // ─── Shared primitives ────────────────────────────────────────────────────────
@@ -593,52 +593,13 @@ function StepEffects({ value, onChange }) {
   )
 }
 
-function StepSocial({ value, onChange }) {
-  const PLATFORMS = [
-    { id: 'tiktok',    label: 'TikTok',          color: '#000',    textColor: '#fff' },
-    { id: 'instagram', label: 'Instagram',        color: '#e1306c', textColor: '#fff' },
-    { id: 'youtube',   label: 'YouTube Shorts',   color: '#ff0000', textColor: '#fff' },
-  ]
-
-  return (
-    <>
-      <PageTitle step={6} title="Connect social media" subtitle="Select the social media accounts where you want to publish" optional />
-      <div
-        className="rounded-xl border border-[#e5e1ff] p-6 text-center mb-4"
-        style={{ background: '#fafafe' }}
-      >
-        <p className="text-sm text-[#6b7280] mb-4">You haven't connected any social media accounts yet.</p>
-        <div className="space-y-2">
-          {PLATFORMS.map(p => (
-            <button
-              key={p.id}
-              onClick={() => {
-                const next = value.includes(p.id) ? value.filter(x => x !== p.id) : [...value, p.id]
-                onChange(next)
-              }}
-              className="w-full flex items-center justify-between px-4 py-2.5 rounded-lg border text-sm font-medium transition-all"
-              style={value.includes(p.id)
-                ? { background: '#f3f0ff', borderColor: '#6c47ff', color: '#6c47ff' }
-                : { background: '#fff', borderColor: '#e5e1ff', color: '#374151' }
-              }
-            >
-              <span>{p.label}</span>
-              <span>{value.includes(p.id) ? 'Connected' : 'Connect account'}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <p className="text-xs text-[#9ca3af] text-center">You can connect your social media accounts later.</p>
-    </>
-  )
-}
 
 function StepSeriesDetails({ value, onChange }) {
   const set = (k, v) => onChange({ ...value, [k]: v })
 
   return (
     <>
-      <PageTitle step={7} title="Series Details" subtitle="Finalize your series details and posting schedule" />
+      <PageTitle step={6} title="Series Details" subtitle="Finalize your series details and posting schedule" />
       <div className="space-y-5">
         <Input
           label="Series Name"
@@ -707,7 +668,7 @@ function StepAccount({ prefs, loading, error, onSubmit }) {
 
   return (
     <>
-      <PageTitle step={8} title="Create your account" subtitle="Your series is ready. Set up your account to launch it." />
+      <PageTitle step={7} title="Create your account" subtitle="Your series is ready. Set up your account to launch it." />
 
       {/* Setup summary */}
       <div
@@ -813,11 +774,11 @@ export default function OnboardingPage() {
     if (step === 1) return prefs.voice !== ''
     if (step === 3) return prefs.artStyle !== ''
     if (step === 4) return prefs.captions !== ''
-    if (step === 7) return prefs.series.name.trim() !== ''
+    if (step === 6) return prefs.series.name.trim() !== ''
     return true
   }
 
-  const OPTIONAL = new Set([2, 5, 6]) // music, effects, social
+  const OPTIONAL = new Set([2, 5]) // music, effects
 
   const next = () => step < TOTAL - 1 && setStep(s => s + 1)
   const back = () => step > 0 && setStep(s => s - 1)
@@ -847,9 +808,8 @@ export default function OnboardingPage() {
     <StepArtStyle      key={3} value={prefs.artStyle} onChange={update('artStyle')} />,
     <StepCaptions      key={4} value={prefs.captions} onChange={update('captions')} />,
     <StepEffects       key={5} value={prefs.effects}  onChange={update('effects')}  />,
-    <StepSocial        key={6} value={prefs.social}   onChange={update('social')}   />,
-    <StepSeriesDetails key={7} value={prefs.series}   onChange={update('series')}   />,
-    <StepAccount       key={8} prefs={prefs} loading={loading} error={error} onSubmit={handleRegister} />,
+    <StepSeriesDetails key={6} value={prefs.series}   onChange={update('series')}   />,
+    <StepAccount       key={7} prefs={prefs} loading={loading} error={error} onSubmit={handleRegister} />,
   ]
 
   const isLast = step === TOTAL - 1

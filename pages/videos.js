@@ -124,7 +124,15 @@ export default function VideosPage() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-5 py-3" style={{ color: 'var(--th-text-2)' }}>{v.topic || '—'}</td>
+                      <td className="px-5 py-3">
+                        <div style={{ color: 'var(--th-text-2)' }}>{v.topic || '—'}</div>
+                        {v.topic === 'Custom' && v.prompt && (
+                          <div className="text-xs mt-0.5 max-w-[200px] truncate" style={{ color: 'var(--th-text-4)' }}
+                            title={v.prompt}>
+                            {v.prompt}
+                          </div>
+                        )}
+                      </td>
                       <td className="px-5 py-3" style={{ color: 'var(--th-text-2)' }}>{v.duration || '—'}</td>
                       <td className="px-5 py-3"><StatusBadge status={v.status} /></td>
                       <td className="px-5 py-3" style={{ color: 'var(--th-text-4)' }}>{new Date(v.created_at).toLocaleDateString()}</td>
