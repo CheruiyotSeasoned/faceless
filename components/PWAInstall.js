@@ -21,6 +21,16 @@ export default function PWAInstall() {
     return () => window.removeEventListener('beforeinstallprompt', handler)
   }, [])
 
+  // Signal to other components (e.g. chatbot) that the banner is visible
+  useEffect(() => {
+    if (!installed && (prompt || showIOS)) {
+      document.body.classList.add('pwa-banner-active')
+    } else {
+      document.body.classList.remove('pwa-banner-active')
+    }
+    return () => document.body.classList.remove('pwa-banner-active')
+  }, [installed, prompt, showIOS])
+
   const install = async () => {
     if (!prompt) return
     prompt.prompt()

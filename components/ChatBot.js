@@ -109,13 +109,22 @@ function findAnswer(input) {
 // ── Component ───────────────────────────────────────────────────────────────
 
 export default function ChatBot() {
-  const [open,     setOpen]     = useState(false)
-  const [messages, setMessages] = useState([])
-  const [input,    setInput]    = useState('')
-  const [typing,   setTyping]   = useState(false)
-  const [dot,      setDot]      = useState(false)
+  const [open,        setOpen]        = useState(false)
+  const [messages,    setMessages]    = useState([])
+  const [input,       setInput]       = useState('')
+  const [typing,      setTyping]      = useState(false)
+  const [bannerUp,    setBannerUp]    = useState(false)
   const bottomRef = useRef(null)
   const inputRef  = useRef(null)
+
+  // Lift above PWA install banner when it is visible
+  useEffect(() => {
+    const check = () => setBannerUp(document.body.classList.contains('pwa-banner-active'))
+    check()
+    const obs = new MutationObserver(check)
+    obs.observe(document.body, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
 
   // Greeting on first open
   useEffect(() => {
@@ -168,7 +177,7 @@ export default function ChatBot() {
       {/* ── Chat window ── */}
       {open && (
         <div style={{
-          position: 'fixed', bottom: 84, right: 20, zIndex: 9000,
+          position: 'fixed', bottom: bannerUp ? 160 : 84, right: 20, zIndex: 9000,
           width: 340, maxHeight: '70vh',
           background: '#0e0e1a',
           border: '1px solid rgba(139,61,255,0.25)',
@@ -308,7 +317,7 @@ export default function ChatBot() {
       <button
         onClick={() => setOpen(o => !o)}
         style={{
-          position: 'fixed', bottom: 24, right: 20, zIndex: 9001,
+          position: 'fixed', bottom: bannerUp ? 100 : 24, right: 20, zIndex: 9001,
           width: 52, height: 52, borderRadius: '50%',
           background: 'linear-gradient(135deg,#5b21b6,#7c3aed)',
           border: 'none', cursor: 'pointer',

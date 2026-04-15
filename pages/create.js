@@ -496,27 +496,44 @@ export default function CreatePage() {
                 <p className="text-xs" style={{ color: 'var(--th-text-4)' }}>
                   Ready in ~3 min &nbsp;·&nbsp; Email notification when done &nbsp;·&nbsp; Credits refunded if generation fails
                 </p>
-                <button type="submit" disabled={loading || !user || !canGenerate}
-                  className="btn-primary flex items-center gap-2 flex-shrink-0"
-                  style={{ opacity: canGenerate ? 1 : 0.5, cursor: canGenerate ? 'pointer' : 'not-allowed' }}>
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {/* Upgrade button — shown when not enough credits */}
+                  {user && !canGenerate && (
+                    <a href="/billing" className="flex items-center gap-1.5 flex-shrink-0"
+                      style={{
+                        background: 'linear-gradient(135deg,#f59e0b,#ef4444)',
+                        color: '#fff', borderRadius: 10,
+                        padding: '9px 16px', fontSize: 13, fontWeight: 700,
+                        textDecoration: 'none', whiteSpace: 'nowrap',
+                      }}>
+                      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+                        <path d="M6.5 1L8.2 4.5H12L9 7l1 3.5L6.5 8.5 3.5 10.5l1-3.5L1.5 4.5H5Z" fill="white"/>
                       </svg>
-                      Generating…
-                    </>
-                  ) : (
-                    <>
-                      Generate video
-                      <span style={{
-                        background: 'rgba(255,255,255,0.18)', padding: '1px 7px', borderRadius: 5,
-                        fontSize: 11,
-                      }}>50 credits</span>
-                    </>
+                      Upgrade plan
+                    </a>
                   )}
-                </button>
+                  <button type="submit" disabled={loading || !user || !canGenerate}
+                    className="btn-primary flex items-center gap-2"
+                    style={{ opacity: canGenerate ? 1 : 0.4, cursor: canGenerate ? 'pointer' : 'not-allowed' }}>
+                    {loading ? (
+                      <>
+                        <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24" fill="none">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                        </svg>
+                        Generating…
+                      </>
+                    ) : (
+                      <>
+                        Generate video
+                        <span style={{
+                          background: 'rgba(255,255,255,0.18)', padding: '1px 7px', borderRadius: 5,
+                          fontSize: 11,
+                        }}>50 credits</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
 
