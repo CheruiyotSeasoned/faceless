@@ -822,7 +822,7 @@ export default function HomePage() {
               <span className="font-black tracking-tight">
                 <span style={{ color: 'var(--th-text-2)' }}>ClipTok</span><span style={{ background: 'linear-gradient(135deg, #7c3aed, #a855f7)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}> AI</span>
               </span>
-              <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2025</span>
+              <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2026</span>
             </div>
             <div className="flex gap-6">
               {[['Terms', '/terms'], ['Privacy', '/privacy'], ['Support', '/support']].map(([label, href]) => (

@@ -266,7 +266,7 @@ function Footer() {
   return (
     <footer className="py-10 px-4" style={{ borderTop: '1px solid var(--th-border)' }}>
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-5">
-        <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2025 ClipTok AI</span>
+        <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>© 2026 ClipTok AI</span>
         <div className="flex gap-6">
           {[['Terms', '/terms'], ['Privacy', '/privacy'], ['Support', '/support']].map(([label, href]) => (
             <Link key={label} href={href} className="text-sm hover:underline" style={{ color: 'var(--th-text-4)' }}>{label}</Link>
