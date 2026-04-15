@@ -4,8 +4,12 @@ import { applyTheme, getStoredTheme } from '../lib/theme'
 
 export default function App({ Component, pageProps }) {
   useEffect(() => {
-    // Apply stored theme immediately on mount (default: light)
     applyTheme(getStoredTheme())
+
+    // Register service worker for PWA / offline support
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
+    }
   }, [])
 
   return <Component {...pageProps} />
