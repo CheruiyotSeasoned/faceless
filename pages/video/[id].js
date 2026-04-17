@@ -169,14 +169,32 @@ export default function VideoPage() {
                   {video.title || video.topic || 'Untitled'}
                 </h1>
 
+                {video.prompt && (
+                  <div className="card p-4 mb-4">
+                    <p className="text-xs font-semibold mb-1.5" style={{ color: 'var(--th-text-4)' }}>PROMPT</p>
+                    <p className="text-sm leading-relaxed" style={{ color: 'var(--th-text-2)' }}>{video.prompt}</p>
+                  </div>
+                )}
+
+                {video.error_message && (
+                  <div className="rounded-xl p-3 mb-4 text-sm" style={{ background: 'rgba(220,38,38,0.07)', border: '1px solid rgba(220,38,38,0.25)', color: '#f87171' }}>
+                    <span className="font-semibold">Error: </span>{video.error_message}
+                  </div>
+                )}
+
                 <div className="card p-4 mb-5 divide-y" style={{ '--tw-divide-opacity': 1 }}>
                   {[
-                    ['Topic',    video.topic],
-                    ['Duration', video.duration],
-                    ['Voice',    video.voice],
-                    ['Style',    video.style],
-                    ['Ratio',    video.aspect_ratio],
-                    ['Created',  video.created_at && new Date(video.created_at).toLocaleDateString()],
+                    ['Topic',     video.topic],
+                    ['Duration',  video.duration ? `${video.duration}s` : null],
+                    ['Voice',     video.voice],
+                    ['Style',     video.style],
+                    ['Theme',     video.theme],
+                    ['Music',     video.bg_music],
+                    ['Language',  video.language],
+                    ['Ratio',     video.aspect_ratio],
+                    ['Credits',   video.credits_used ? `${video.credits_used} credit${video.credits_used === '1' ? '' : 's'}` : null],
+                    ['Created',   video.created_at && new Date(video.created_at).toLocaleString()],
+                    ['Updated',   video.updated_at && video.updated_at !== video.created_at ? new Date(video.updated_at).toLocaleString() : null],
                   ].filter(([, v]) => v).map(([label, val]) => (
                     <div key={label} className="flex justify-between py-2.5 first:pt-0 last:pb-0" style={{ borderColor: 'var(--th-border)' }}>
                       <span className="text-sm" style={{ color: 'var(--th-text-4)' }}>{label}</span>
