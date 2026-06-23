@@ -4,6 +4,13 @@ import { admin } from '../../lib/admin'
 
 const PLANS = ['starter', 'pro', 'creator']
 const PLAN_COLORS = { starter: '#3b82f6', pro: 'var(--th-accent)', creator: '#f59e0b' }
+const STATUS_COLORS = {
+  active:    { bg: 'rgba(34,197,94,0.1)',   color: '#22c55e' },
+  pending:   { bg: 'rgba(245,158,11,0.12)', color: '#f59e0b' },
+  failed:    { bg: 'rgba(239,68,68,0.1)',   color: '#ef4444' },
+  cancelled: { bg: 'var(--th-bg-2)',        color: 'var(--th-text-4)' },
+  expired:   { bg: 'var(--th-bg-2)',        color: 'var(--th-text-4)' },
+}
 
 function fmt(amount) {
   // amount is stored in minor units (e.g. 12900 = 129.00)
@@ -80,7 +87,7 @@ export default function AdminTransactions() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
-                    {['Date', 'User', 'Plan', 'Amount', 'Credits', 'Gateway', 'Reference', 'Renews'].map(h => (
+                    {['Date', 'User', 'Plan', 'Status', 'Amount', 'Credits', 'Gateway', 'Reference', 'Renews'].map(h => (
                       <th key={h} className="px-4 py-3 text-left font-medium" style={{ color: 'var(--th-text-3)' }}>{h}</th>
                     ))}
                   </tr>
@@ -100,6 +107,17 @@ export default function AdminTransactions() {
                           style={{ background: `${PLAN_COLORS[tx.plan]}18`, color: PLAN_COLORS[tx.plan] || 'var(--th-text-3)' }}>
                           {tx.plan}
                         </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        {(() => {
+                          const sc = STATUS_COLORS[tx.status] || STATUS_COLORS.pending
+                          return (
+                            <span className="px-2 py-0.5 rounded-full text-xs font-semibold capitalize"
+                              style={{ background: sc.bg, color: sc.color }}>
+                              {tx.status}
+                            </span>
+                          )
+                        })()}
                       </td>
                       <td className="px-4 py-3 font-semibold" style={{ color: 'var(--th-text-1)' }}>
                         {fmt(tx.amount)}

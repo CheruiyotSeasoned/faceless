@@ -19,6 +19,7 @@ export default function AdminVideos() {
   const [status,  setStatus]  = useState('')
   const [loading, setLoading] = useState(true)
   const [confirm, setConfirm] = useState(null)
+  const [watch,   setWatch]   = useState(null)
 
   const load = useCallback(() => {
     setLoading(true)
@@ -90,11 +91,20 @@ export default function AdminVideos() {
                         {new Date(v.created_at).toLocaleDateString()}
                       </td>
                       <td className="px-4 py-3">
-                        <button onClick={() => setConfirm(v.id)}
-                          className="text-xs px-2.5 py-1 rounded-lg"
-                          style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444' }}>
-                          Delete
-                        </button>
+                        <div className="flex gap-2 justify-end">
+                          {v.video_url && (
+                            <button onClick={() => setWatch(v)}
+                              className="text-xs px-2.5 py-1 rounded-lg"
+                              style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)' }}>
+                              Watch
+                            </button>
+                          )}
+                          <button onClick={() => setConfirm(v.id)}
+                            className="text-xs px-2.5 py-1 rounded-lg"
+                            style={{ background: 'rgba(239,68,68,0.08)', color: '#ef4444' }}>
+                            Delete
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )
@@ -112,6 +122,33 @@ export default function AdminVideos() {
           </div>
         )}
       </div>
+
+      {watch && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.75)' }}
+          onClick={() => setWatch(null)}>
+          <div className="card w-full max-w-sm p-4 space-y-3" onClick={e => e.stopPropagation()}>
+            <div className="flex items-start justify-between gap-3">
+              <div className="min-w-0">
+                <div className="font-medium truncate" style={{ color: 'var(--th-text-1)' }}>{watch.title || watch.topic || 'Video'}</div>
+                <div className="text-xs truncate" style={{ color: 'var(--th-text-4)' }}>{watch.user_name} · {watch.user_email}</div>
+              </div>
+              <button onClick={() => setWatch(null)} className="text-sm px-2" style={{ color: 'var(--th-text-4)' }}>✕</button>
+            </div>
+            <video
+              src={watch.video_url}
+              poster={watch.thumbnail_url || undefined}
+              controls
+              autoPlay
+              className="w-full rounded-lg"
+              style={{ maxHeight: '70vh', background: '#000' }}
+            />
+            <a href={watch.video_url} target="_blank" rel="noreferrer"
+              className="block text-center text-xs" style={{ color: 'var(--th-accent)' }}>
+              Open in new tab
+            </a>
+          </div>
+        </div>
+      )}
 
       {confirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: 'rgba(0,0,0,0.5)' }}>
