@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import AdminShell from '../../components/AdminShell'
+import Link from 'next/link'
 import { admin } from '../../lib/admin'
 import { vadoo } from '../../lib/api'
 
@@ -55,13 +56,19 @@ export default function AdminDashboard() {
             )}
 
             {/* Stats row */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               <StatCard label="Total users"    value={data?.users}      color="var(--th-accent)" />
               <StatCard label="Total videos"   value={data?.videos}     color="var(--th-text-1)" />
               <StatCard label="Completed"      value={data?.completed}  color="#22c55e" />
-              <StatCard label="Processing"     value={data?.processing} color="#f59e0b" />
-              <StatCard label="Failed"         value={data?.failed}     color="#ef4444" />
               <StatCard label="Vadoo credits"  value={balance?.balance ?? '—'} color="#a78bfa" sub="provider balance" />
+            </div>
+
+            {/* Opus Clip stats row */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <StatCard label="Clip projects" value={data?.opus_projects ?? '—'} color="var(--th-accent)" sub="all-time" />
+              <StatCard label="Clips generated" value={data?.opus_clips ?? '—'} color="#22c55e" sub="all-time" />
+              <StatCard label="Processing"    value={data?.processing} color="#f59e0b" />
+              <StatCard label="Failed"        value={data?.failed}     color="#ef4444" />
             </div>
 
             <div className="grid lg:grid-cols-2 gap-6">

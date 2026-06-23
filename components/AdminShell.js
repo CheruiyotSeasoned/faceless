@@ -25,6 +25,13 @@ const NAV = [
       <path d="M11 6.5l4-2.5v8l-4-2.5" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
     </svg>
   )},
+  { href: '/admin/clips',    label: 'Clips', icon: (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M2 4a2 2 0 104 0 2 2 0 00-4 0zM2 12a2 2 0 104 0 2 2 0 00-4 0z" stroke="currentColor" strokeWidth="1.4"/>
+      <path d="M5.8 5.2l4.4 2.4M5.8 10.8l4.4-2.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"/>
+      <circle cx="13" cy="8" r="1.5" stroke="currentColor" strokeWidth="1.4"/>
+    </svg>
+  )},
   { href: '/admin/transactions', label: 'Transactions', icon: (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <rect x="1" y="3" width="14" height="10" rx="2" stroke="currentColor" strokeWidth="1.4"/>

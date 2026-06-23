@@ -92,7 +92,50 @@ export default function AdminSettings() {
         <Section title="Vadoo API">
           <Field label="Vadoo API key" name="vadoo_api_key" value={form.vadoo_api_key} onChange={set}
             type="password"
-            hint="Used to generate videos via the Vadoo AI API." />
+            hint="Used to generate AI faceless videos via Vadoo." />
+        </Section>
+
+        {/* Opus Clip */}
+        <Section title="Opus Clip API">
+          <Field label="Opus Clip API key" name="opus_clip_api_key" value={form.opus_clip_api_key} onChange={set}
+            type="password"
+            hint="Used to repurpose long videos into short clips. Get your key at opus.pro dashboard." />
+        </Section>
+
+        {/* Payment gateway selector */}
+        <Section title="Payment Gateway">
+          <div>
+            <label className="block text-sm font-medium mb-1.5" style={{ color: 'var(--th-text-2)' }}>Active gateway</label>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { id: 'paystack', label: 'Paystack', desc: 'Cards, M-Pesa, bank — Africa-focused' },
+                { id: 'stripe',   label: 'Stripe',   desc: 'Global cards & wallets' },
+              ].map(g => {
+                const active = (form.payment_gateway || 'paystack') === g.id
+                return (
+                  <button
+                    key={g.id}
+                    type="button"
+                    onClick={() => set({ target: { name: 'payment_gateway', value: g.id } })}
+                    className="text-left p-4 rounded-xl transition-all"
+                    style={{
+                      border: `1.5px solid ${active ? 'var(--th-accent)' : 'var(--th-border)'}`,
+                      background: active ? 'var(--th-accent-lt)' : 'var(--th-bg-2)',
+                    }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold" style={{ color: 'var(--th-text-1)' }}>{g.label}</span>
+                      {active && <span className="badge-purple text-xs font-bold px-2 py-0.5 rounded-full">Active</span>}
+                    </div>
+                    <p className="text-xs mt-1" style={{ color: 'var(--th-text-4)' }}>{g.desc}</p>
+                  </button>
+                )
+              })}
+            </div>
+            <p className="text-xs mt-2" style={{ color: 'var(--th-text-4)' }}>
+              Customers will be charged through the selected gateway. Make sure its keys below are filled in.
+            </p>
+          </div>
         </Section>
 
         {/* Paystack */}
@@ -105,6 +148,19 @@ export default function AdminSettings() {
           </div>
         </Section>
 
+        {/* Stripe */}
+        <Section title="Stripe">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Field label="Publishable key" name="stripe_public_key" value={form.stripe_public_key} onChange={set}
+              hint="Starts with pk_live_ or pk_test_" />
+            <Field label="Secret key" name="stripe_secret_key" value={form.stripe_secret_key} onChange={set}
+              type="password" hint="Starts with sk_live_ or sk_test_" />
+          </div>
+          <Field label="Webhook signing secret" name="stripe_webhook_secret" value={form.stripe_webhook_secret} onChange={set}
+            type="password"
+            hint="Starts with whsec_. Add an endpoint for the 'checkout.session.completed' event pointing to /billing/stripe/webhook, then paste its signing secret here." />
+        </Section>
+
         {/* Billing */}
         <Section title="Billing & Pricing">
           <div>
@@ -113,8 +169,8 @@ export default function AdminSettings() {
               {CURRENCIES.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
             <p className="text-xs mt-1" style={{ color: 'var(--th-text-4)' }}>
-              Controls the currency sent to Paystack and displayed on the pricing page.
-              Ensure your Paystack account supports this currency.
+              Controls the currency sent to the active payment gateway and shown on the pricing page.
+              Ensure your gateway account supports this currency.
             </p>
           </div>
 

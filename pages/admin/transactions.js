@@ -80,7 +80,7 @@ export default function AdminTransactions() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--th-border)' }}>
-                    {['Date', 'User', 'Plan', 'Amount', 'Credits', 'Reference', 'Renews'].map(h => (
+                    {['Date', 'User', 'Plan', 'Amount', 'Credits', 'Gateway', 'Reference', 'Renews'].map(h => (
                       <th key={h} className="px-4 py-3 text-left font-medium" style={{ color: 'var(--th-text-3)' }}>{h}</th>
                     ))}
                   </tr>
@@ -106,6 +106,12 @@ export default function AdminTransactions() {
                       </td>
                       <td className="px-4 py-3" style={{ color: 'var(--th-text-2)' }}>
                         +{tx.credits_granted}
+                      </td>
+                      <td className="px-4 py-3">
+                        <span className="px-2 py-0.5 rounded-full text-xs font-medium capitalize"
+                          style={{ background: 'var(--th-bg-2)', color: 'var(--th-text-3)' }}>
+                          {tx.gateway || 'paystack'}
+                        </span>
                       </td>
                       <td className="px-4 py-3">
                         <code className="text-xs" style={{ color: 'var(--th-text-4)' }}>{tx.paystack_reference}</code>

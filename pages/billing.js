@@ -124,7 +124,17 @@ export default function BillingPage() {
     setSuccess(false)
     try {
       const data = await billingApi.initialize({ plan: plan.id })
-      if (data.data?.authorization_url) setCheckoutUrl(data.data.authorization_url)
+      const url = data.url || data.data?.authorization_url
+      if (!url) throw new Error('Could not start checkout. Please try again.')
+
+      if (data.gateway === 'stripe') {
+        // Stripe's hosted Checkout cannot be embedded in an iframe — redirect
+        // the whole window; it returns to /billing?success=1 after payment.
+        window.location.href = url
+        return
+      }
+      // Paystack supports the embedded iframe dialog.
+      setCheckoutUrl(url)
     } catch (e) {
       setError(e.message || 'Payment failed. Please try again.')
     } finally {
@@ -176,6 +186,13 @@ export default function BillingPage() {
                 <path d="M4.5 7l2 2 3-3" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
               Payment successful! Credits have been added to your account.
+            </div>
+          )}
+
+          {router.query.cancelled === '1' && !success && (
+            <div className="rounded-xl border p-3 text-sm mb-6"
+              style={{ background: 'rgba(234,179,8,0.08)', borderColor: 'rgba(234,179,8,0.2)', color: '#facc15' }}>
+              Payment cancelled. You can pick a plan again whenever you're ready.
             </div>
           )}
 

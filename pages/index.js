@@ -636,6 +636,109 @@ export default function HomePage() {
         </section>
 
         {/* ═══════════════════════════════════════════════════════
+            OPUS CLIP — REPURPOSE LONG VIDEOS
+        ═══════════════════════════════════════════════════════ */}
+        <section id="clips" className="py-24 px-4"
+          style={{ background: 'var(--th-surface)', borderTop: '1px solid var(--th-border)', borderBottom: '1px solid var(--th-border)' }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+              {/* Left: copy */}
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full px-4 py-1.5 mb-6 text-sm font-semibold"
+                  style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)' }}>
+                  ✂️ AI Short Clips
+                </div>
+                <h2 className="text-4xl sm:text-5xl font-black mb-6 leading-[1.1]" style={{ color: 'var(--th-text-1)' }}>
+                  Turn any long video into viral clips
+                </h2>
+                <p className="text-lg mb-8 leading-relaxed" style={{ color: 'var(--th-text-3)' }}>
+                  Got a podcast, webinar, or YouTube video? Paste the URL and our AI finds the best 30–90 second moments, adds captions, and exports them ready to post.
+                </p>
+
+                <div className="space-y-4 mb-10">
+                  {[
+                    { icon: '🔗', title: 'Any URL', desc: 'YouTube, Google Drive, Vimeo, Zoom, Loom, MP4 links — if it plays, we clip it.' },
+                    { icon: '🧠', title: 'AI picks the best moments', desc: 'Ranked by virality score so you always download the top clips first.' },
+                    { icon: '📲', title: 'Ready to post', desc: 'Portrait format, styled captions, no editing needed.' },
+                  ].map(f => (
+                    <div key={f.title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                      <div style={{ width: 38, height: 38, borderRadius: 10, background: 'var(--th-accent-lt)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, flexShrink: 0 }}>
+                        {f.icon}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--th-text-1)' }}>{f.title}</div>
+                        <div style={{ fontSize: 13, color: 'var(--th-text-3)', marginTop: 2 }}>{f.desc}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <Link href={loggedIn ? '/clips' : '/login'} className="btn-primary text-sm px-7 py-3 inline-flex items-center gap-2">
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                    <path d="M2 4a2 2 0 104 0 2 2 0 00-4 0zM2 10a2 2 0 104 0 2 2 0 00-4 0z" stroke="white" strokeWidth="1.4"/>
+                    <path d="M5.5 4.8l3.5 1.8-3.5 1.8" stroke="white" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="12" cy="6.6" r="1.5" stroke="white" strokeWidth="1.4"/>
+                  </svg>
+                  {loggedIn ? 'Go to Clips' : 'Try AI Clips free'}
+                </Link>
+              </div>
+
+              {/* Right: visual flow diagram */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 400, margin: '0 auto' }}>
+                {/* Step 1 */}
+                <div className="card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--th-accent-lt)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 16 }}>🔗</div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--th-text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Step 1</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--th-text-1)' }}>Paste your video URL</div>
+                    <div style={{ fontSize: 12, color: 'var(--th-text-4)', marginTop: 2, fontFamily: 'monospace' }}>youtube.com/watch?v=…</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="24" stroke="var(--th-border)" strokeWidth="2" strokeDasharray="4 4"/></svg>
+                </div>
+
+                {/* Step 2 */}
+                <div className="card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--th-accent-lt)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 16 }}>🧠</div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--th-text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Step 2</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--th-text-1)' }}>AI finds viral moments</div>
+                    <div style={{ fontSize: 12, color: 'var(--th-text-4)', marginTop: 2 }}>5–20 min · scored by virality</div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <svg width="2" height="24" viewBox="0 0 2 24"><line x1="1" y1="0" x2="1" y2="24" stroke="var(--th-border)" strokeWidth="2" strokeDasharray="4 4"/></svg>
+                </div>
+
+                {/* Step 3 */}
+                <div className="card" style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 14 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'var(--th-accent-lt)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, fontSize: 16 }}>📲</div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--th-text-4)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Step 3</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--th-text-1)' }}>Download &amp; post</div>
+                    <div style={{ fontSize: 12, color: 'var(--th-text-4)', marginTop: 2 }}>TikTok · Reels · Shorts</div>
+                  </div>
+                </div>
+
+                <div className="card" style={{ padding: '14px 20px', display: 'flex', alignItems: 'center', gap: 12, marginTop: 4 }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 12, color: 'var(--th-text-4)' }}>From a 1-hour podcast</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--th-text-1)', marginTop: 2 }}>→ Up to 10 ready-to-post clips</div>
+                  </div>
+                  <span style={{ background: 'var(--th-accent-lt)', color: 'var(--th-accent)', border: '1px solid var(--th-accent-md)', borderRadius: 99, padding: '3px 10px', fontSize: 11, fontWeight: 700, flexShrink: 0 }}>
+                    10 credits
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════════════════════════════════════
             NICHES TICKER
         ═══════════════════════════════════════════════════════ */}
         <section className="py-16 overflow-hidden" style={{ borderTop: '1px solid var(--th-border)', borderBottom: '1px solid var(--th-border)' }}>
