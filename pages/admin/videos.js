@@ -114,11 +114,11 @@ export default function AdminVideos() {
           </div>
         </div>
 
-        {pages > 1 && (
+        {!loading && videos.length > 0 && (
           <div className="flex items-center justify-center gap-2">
-            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1} className="btn-secondary px-3 py-1.5 text-sm">Prev</button>
+            <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page <= 1} className="btn-secondary px-3 py-1.5 text-sm">Prev</button>
             <span className="text-sm" style={{ color: 'var(--th-text-3)' }}>Page {page} of {pages}</span>
-            <button onClick={() => setPage(p => Math.min(pages, p + 1))} disabled={page === pages} className="btn-secondary px-3 py-1.5 text-sm">Next</button>
+            <button onClick={() => setPage(p => Math.min(pages, p + 1))} disabled={page >= pages} className="btn-secondary px-3 py-1.5 text-sm">Next</button>
           </div>
         )}
       </div>
