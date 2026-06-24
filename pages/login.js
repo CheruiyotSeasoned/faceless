@@ -19,7 +19,8 @@ export default function LoginPage() {
     setLoading(true)
     try {
       await auth.login(form)
-      router.push('/dashboard')
+      const next = typeof router.query.redirect === 'string' ? router.query.redirect : '/dashboard'
+      router.push(next.startsWith('/') ? next : '/dashboard')
     } catch (e) {
       setError(e.message || 'Invalid email or password.')
     } finally {

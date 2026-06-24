@@ -69,12 +69,20 @@ const Icon = {
       <circle cx="13" cy="8" r="1.5" stroke="currentColor" strokeWidth="1.4"/>
     </svg>
   ),
+  Studio: () => (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <rect x="1.5" y="2.5" width="13" height="11" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+      <circle cx="5.5" cy="6" r="1.3" stroke="currentColor" strokeWidth="1.3"/>
+      <path d="M2 11l3.5-3 2.5 2 3-3.5 3 3.5" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round"/>
+    </svg>
+  ),
 }
 
 const NAV = [
   { href: '/dashboard', label: 'Series',   Icon: Icon.Series   },
   { href: '/videos',    label: 'Videos',   Icon: Icon.Videos   },
   { href: '/clips',     label: 'Clips',    Icon: Icon.Clips    },
+  { href: '/studio',    label: 'Studio',   Icon: Icon.Studio   },
   { href: '/guides',    label: 'Guides',   Icon: Icon.Guides   },
   { href: '/settings',  label: 'Settings', Icon: Icon.Settings },
 ]

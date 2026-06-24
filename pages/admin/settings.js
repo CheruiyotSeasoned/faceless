@@ -102,6 +102,19 @@ export default function AdminSettings() {
             hint="Used to repurpose long videos into short clips. Get your key at opus.pro dashboard." />
         </Section>
 
+        {/* Higgsfield */}
+        <Section title="Higgsfield AI Studio">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <Field label="API Key ID" name="higgsfield_api_key" value={form.higgsfield_api_key} onChange={set}
+              type="password" hint="From cloud.higgsfield.ai → API keys" />
+            <Field label="API Key Secret" name="higgsfield_api_secret" value={form.higgsfield_api_secret} onChange={set}
+              type="password" hint="The secret paired with the key ID" />
+          </div>
+          <p className="text-xs mt-1" style={{ color: 'var(--th-text-4)' }}>
+            Powers the multi-model image/video Studio. Both values are required for it to work.
+          </p>
+        </Section>
+
         {/* Payment gateway selector */}
         <Section title="Payment Gateway">
           <div>
