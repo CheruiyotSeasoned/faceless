@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import AdminShell from '../../components/AdminShell'
 import { admin } from '../../lib/admin'
 
@@ -21,15 +21,27 @@ export default function AdminVideos() {
   const [confirm, setConfirm] = useState(null)
   const [watch,   setWatch]   = useState(null)
 
-  const load = useCallback(() => {
-    setLoading(true)
-    admin.videos({ search, status, page })
-      .then(d => { setVideos(d.videos); setTotal(d.total); setPages(d.pages) })
-      .catch(() => {})
-      .finally(() => setLoading(false))
+  const pollRef = useRef(null)
+
+  // `silent` skips the loading spinner so background polls don't flash the UI.
+  const load = useCallback((silent = false) => {
+    if (!silent) setLoading(true)
+    return admin.videos({ search, status, page })
+      .then(d => { setVideos(d.videos); setTotal(d.total); setPages(d.pages); return d.videos })
+      .catch(() => [])
+      .finally(() => { if (!silent) setLoading(false) })
   }, [search, status, page])
 
   useEffect(() => { load() }, [load])
+
+  // While any video is still processing, re-fetch every 15s. The backend pulls
+  // live status from Vadoo on each call, so stuck "processing" rows self-heal.
+  useEffect(() => {
+    const hasProcessing = videos.some(v => v.status === 'processing')
+    if (!hasProcessing) return
+    pollRef.current = setInterval(() => load(true), 15000)
+    return () => clearInterval(pollRef.current)
+  }, [videos, load])
 
   const handleDelete = async (id) => {
     try { await admin.deleteVideo(id); load() } catch {}

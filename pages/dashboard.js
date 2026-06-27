@@ -286,10 +286,27 @@ export default function DashboardPage() {
 
   useEffect(() => {
     if (!user) return
-    videosApi.list()
-      .then(d => setVideoList(d.videos || []))
-      .catch(() => {})
-      .finally(() => setLoading(false))
+    let stopped = false
+    let timer = null
+
+    const load = (silent = false) => {
+      videosApi.list()
+        .then(d => {
+          if (stopped) return
+          const list = d.videos || []
+          setVideoList(list)
+          // Keep polling while anything is still generating — the backend pulls
+          // live status from Vadoo on each call, so stuck rows self-heal.
+          if (list.some(v => v.status === 'processing')) {
+            timer = setTimeout(() => load(true), 15000)
+          }
+        })
+        .catch(() => {})
+        .finally(() => { if (!silent) setLoading(false) })
+    }
+
+    load()
+    return () => { stopped = true; clearTimeout(timer) }
   }, [user])
 
   const prefs = ob.load()
