@@ -290,11 +290,14 @@ function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, l
   const femaleVoices = voices.filter(v => v.gender?.toLowerCase() === 'female')
   const otherVoices  = voices.filter(v => !v.gender || (v.gender.toLowerCase() !== 'male' && v.gender.toLowerCase() !== 'female'))
 
-  const groups = [
-    maleVoices.length   && { label: 'Male',   voices: maleVoices   },
-    femaleVoices.length && { label: 'Female', voices: femaleVoices },
-    otherVoices.length  && { label: 'Other',  voices: otherVoices  },
-  ].filter(Boolean)
+  // When voices carry no gender (Vadoo's live list), show one flat list with no header.
+  const groups = (maleVoices.length || femaleVoices.length)
+    ? [
+        maleVoices.length   && { label: 'Male',   voices: maleVoices   },
+        femaleVoices.length && { label: 'Female', voices: femaleVoices },
+        otherVoices.length  && { label: 'Other',  voices: otherVoices  },
+      ].filter(Boolean)
+    : [{ label: '', voices }]
 
   return (
     <>
@@ -325,7 +328,7 @@ function StepVoice({ value, language, onChangeVoice, onChangeLanguage, voices, l
       ) : (
         groups.map(g => (
           <div key={g.label} className="mb-4">
-            <div className="text-xs text-[#9ca3af] font-semibold uppercase tracking-wider mb-2">{g.label}</div>
+            {g.label && <div className="text-xs text-[#9ca3af] font-semibold uppercase tracking-wider mb-2">{g.label}</div>}
             <div className="space-y-1.5">
               {g.voices.map(v => (
                 <SelectCard
@@ -751,8 +754,23 @@ export default function OnboardingPage() {
   const [languages, setLanguages] = useState([])
 
   useEffect(() => {
-    vadooApi.voices().then(d => setVoices(d.voices || [])).catch(() => {})
+    let stopped = false
+    let tries = 0
+
+    const loadVoices = () => {
+      vadooApi.voices()
+        .then(d => {
+          if (stopped) return
+          const list = (d.voices || []).filter(v => v && v.id)
+          if (list.length) { setVoices(list); return }
+          if (tries++ < 6) setTimeout(loadVoices, 2000) // keep polling until Vadoo responds
+        })
+        .catch(() => { if (!stopped && tries++ < 6) setTimeout(loadVoices, 2000) })
+    }
+
+    loadVoices()
     vadooApi.languages().then(d => setLanguages(d.languages || [])).catch(() => {})
+    return () => { stopped = true }
   }, [])
 
   const [prefs, setPrefs] = useState({
